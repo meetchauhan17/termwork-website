@@ -171,11 +171,10 @@
                         <!-- Action Buttons -->
                         <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-5 pt-3 border-top">
                             <button type="button" class="btn btn-outline-secondary btn-lg px-4" id="btn-load-data">
-                                <lottie-player src="/static/refresh.json" background="transparent" speed="1" style="width: 28px; height: 28px; display: inline-block; vertical-align: middle;" loop autoplay></lottie-player>
-                                <span class="ms-1">Load Last Data</span>
+                                <i class="fa-solid fa-clock-rotate-left me-2"></i>Load Last Data
                             </button>
                             <button type="submit" class="btn btn-primary btn-lg px-5 shadow text-white" id="btn-generate">
-                                <lottie-player src="/static/settings.json" background="transparent" speed="1" style="width: 28px; height: 28px; display: inline-block; vertical-align: middle;" loop autoplay></lottie-player>
+                                <lottie-player src="/static/settings.json" background="transparent" speed="1" style="width: 32px; height: 32px; display: inline-block; vertical-align: middle;" loop autoplay></lottie-player>
                                 <span class="ms-1">Generate Termwork</span>
                             </button>
                         </div>
@@ -184,7 +183,7 @@
                     <!-- Loading State -->
                     <div id="loading-overlay" class="d-none">
                         <div class="text-center">
-                            <lottie-player src="/static/loader.json" background="transparent" speed="1" style="width: 250px; height: 130px; margin: 0 auto;" loop autoplay></lottie-player>
+                            <div class="spinner-border text-primary" style="width: 4rem; height: 4rem;" role="status"></div>
                             <h4 class="mt-3 fw-bold text-dark">Generating your document...</h4>
                             <p class="text-muted">This may take a few seconds.</p>
                         </div>
