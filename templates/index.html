@@ -47,7 +47,7 @@
                             </div>
                             <div class="col-md-6">
                                 <label class="form-label fw-semibold">PEN (Enrollment No) <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control form-control-lg" name="pen" required placeholder="e.g. 190XXXXX">
+                                <input type="text" class="form-control form-control-lg" name="pen" required minlength="12" maxlength="12" pattern="\d{12}" title="PEN must be exactly 12 digits" placeholder="e.g. 123456789012">
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label fw-semibold">Class</label>
