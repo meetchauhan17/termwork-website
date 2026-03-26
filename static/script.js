@@ -17,9 +17,10 @@ document.addEventListener('DOMContentLoaded', () => {
         if (count > 0 && count <= 50) {
             html += '<h6 class="w-100 fw-bold mt-2 mb-3 text-secondary">Practical Titles (Optional)</h6>';
             for (let i = 1; i <= count; i++) {
+                let delay = Math.min(i * 0.05, 0.5); // Stagger fade-in delay
                 html += `
-                <div class="col-md-6 mb-3">
-                    <label class="form-label text-muted small">Experiment ${i} Title</label>
+                <div class="col-md-6 mb-3 dynamic-field" style="animation-delay: ${delay}s">
+                    <label class="form-label text-muted small fw-bold">Experiment ${i} Title</label>
                     <input type="text" class="form-control" name="title_${i}" placeholder="Enter title for Exp ${i}">
                 </div>
                 `;

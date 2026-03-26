@@ -4,51 +4,102 @@ body {
     font-family: 'Inter', sans-serif;
 }
 
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes gradientShift {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
 .bg-gradient-primary {
-    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%, #3b82f6 100%);
+    background-size: 200% 200%;
+    animation: gradientShift 6s ease infinite;
 }
 
 .card {
-    border-radius: 1rem;
+    border-radius: 1.25rem;
     overflow: hidden;
+    animation: fadeInUp 0.7s cubic-bezier(0.2, 0.8, 0.2, 1);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08) !important;
+    border: 1px solid rgba(255, 255, 255, 0.8);
 }
 
 .form-control {
-    border-radius: 0.5rem;
-    padding: 0.75rem 1rem;
-    border: 1px solid #e2e8f0;
-    transition: all 0.2s;
+    border-radius: 0.6rem;
+    padding: 0.8rem 1rem;
+    border: 2px solid #e2e8f0;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    background-color: #f8fafc;
 }
 
 .form-control:focus {
     border-color: #7c3aed;
-    box-shadow: 0 0 0 0.25rem rgba(124, 58, 237, 0.25);
+    background-color: #ffffff;
+    box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.15);
+    transform: translateY(-2px);
 }
 
 .section-title {
     color: #4f46e5;
     font-weight: 700;
+    position: relative;
+    display: inline-block;
+}
+
+.section-title::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 30%;
+    height: 3px;
+    background: #7c3aed;
+    border-radius: 2px;
+    transition: width 0.3s ease;
+}
+
+.section-title:hover::after {
+    width: 100%;
+}
+
+.btn {
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    font-weight: 600;
+    letter-spacing: 0.3px;
 }
 
 .btn-primary {
-    background-color: #4f46e5;
-    border-color: #4f46e5;
-    border-radius: 0.5rem;
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    border: none;
+    border-radius: 0.6rem;
 }
 
 .btn-primary:hover {
-    background-color: #4338ca;
-    border-color: #4338ca;
+    background: linear-gradient(135deg, #4338ca 0%, #6d28d9 100%);
+    transform: translateY(-4px);
+    box-shadow: 0 10px 25px rgba(124, 58, 237, 0.4) !important;
 }
 
 .btn-outline-secondary {
-    border-radius: 0.5rem;
+    border-radius: 0.6rem;
+    border-width: 2px;
+}
+
+.btn-outline-secondary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
 }
 
 hr {
-    border-color: #e2e8f0;
-    margin-top: 0.5rem;
-    margin-bottom: 1.5rem;
+    border-color: #cbd5e1;
+    margin-top: 0.8rem;
+    margin-bottom: 2rem;
+    opacity: 0.5;
 }
 
 .card-body {
@@ -58,14 +109,29 @@ hr {
 
 #loading-overlay {
     position: absolute;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    top: 0; left: 0; right: 0; bottom: 0;
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: rgba(248, 249, 250, 0.95);
+    background-color: rgba(255, 255, 255, 0.8);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
     z-index: 10;
-    border-radius: 0 0 1rem 1rem;
+    border-radius: 0 0 1.25rem 1.25rem;
+}
+
+/* Staggered animation class for JS */
+.dynamic-field {
+    opacity: 0;
+    animation: fadeInUp 0.5s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+#success-state i {
+    animation: scaleIn 0.6s cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+
+@keyframes scaleIn {
+    0% { transform: scale(0); opacity: 0; }
+    60% { transform: scale(1.1); }
+    100% { transform: scale(1); opacity: 1; }
 }
