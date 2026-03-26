@@ -73,9 +73,6 @@ def generate():
 
         # For each additional practical, render via docxtpl and append
         for i in range(1, count):
-            # Add a page break before the next practical
-            final_doc.add_page_break()
-
             page_data = base_data.copy()
             page_data['practical_no'] = i + 1
             page_data['titleffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'] = titles[i]
