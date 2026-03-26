@@ -1,5 +1,5 @@
 body {
-    background-color: #ede4f3;
+    background-color: #fff5e6;
     color: #3d2d63;
     font-family: 'Inter', sans-serif;
     position: relative;
@@ -21,14 +21,14 @@ body {
     top: -5%; left: -10%;
     width: 600px; height: 600px;
     max-width: 80vw; max-height: 80vw;
-    background: #c4aee0;
+    background: #d4b8f0;
 }
 
 .bg-blob-2 {
     bottom: -10%; right: -5%;
     width: 700px; height: 700px;
     max-width: 90vw; max-height: 90vw;
-    background: #ffeacd;
+    background: #ffdda6;
     animation-delay: -6s;
     animation-duration: 15s;
 }
