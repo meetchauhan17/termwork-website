@@ -1,6 +1,6 @@
 body {
-    background-color: #5f4a8b;
-    color: #ffeacd;
+    background-color: #ede4f3;
+    color: #3d2d63;
     font-family: 'Inter', sans-serif;
     position: relative;
     overflow-x: hidden;
@@ -21,14 +21,14 @@ body {
     top: -5%; left: -10%;
     width: 600px; height: 600px;
     max-width: 80vw; max-height: 80vw;
-    background: #7b5ea7;
+    background: #c4aee0;
 }
 
 .bg-blob-2 {
     bottom: -10%; right: -5%;
     width: 700px; height: 700px;
     max-width: 90vw; max-height: 90vw;
-    background: #3d2d63;
+    background: #ffeacd;
     animation-delay: -6s;
     animation-duration: 15s;
 }
@@ -280,7 +280,7 @@ hr {
 
 /* Footer */
 footer, footer small, footer .text-secondary {
-    color: rgba(255, 234, 205, 0.8) !important;
+    color: rgba(61, 45, 99, 0.6) !important;
 }
 
 /* --- Mobile Responsiveness --- */
