@@ -3,6 +3,7 @@ import copy
 import sys
 import subprocess
 from flask import Flask, render_template, request, send_file, jsonify
+from docxtpl import DocxTemplate
 from docx import Document
 from lxml import etree
 
@@ -15,32 +16,6 @@ app = Flask(__name__)
 # Ensure directories exist
 os.makedirs('temp', exist_ok=True)
 os.makedirs('outputs', exist_ok=True)
-
-
-def replace_text_in_paragraph(paragraph, data):
-    """Replace {{placeholder}} tags in a paragraph with actual values."""
-    for key, val in data.items():
-        placeholder = f"{{{{{key}}}}}"
-        if placeholder in paragraph.text:
-            text = paragraph.text.replace(placeholder, str(val))
-            paragraph.text = text
-
-
-def replace_text_in_doc(doc, data):
-    """Replace placeholders in all paragraphs and table cells of a document."""
-    for p in doc.paragraphs:
-        replace_text_in_paragraph(p, data)
-
-    for table in doc.tables:
-        for row in table.rows:
-            for cell in row.cells:
-                for p in cell.paragraphs:
-                    replace_text_in_paragraph(p, data)
-                for nested_table in cell.tables:
-                    for n_row in nested_table.rows:
-                        for n_cell in n_row.cells:
-                            for np in n_cell.paragraphs:
-                                replace_text_in_paragraph(np, data)
 
 
 @app.route('/')
@@ -83,23 +58,30 @@ def generate():
         if not os.path.exists(template_path):
             return jsonify({'success': False, 'message': 'Template file not found. Please ensure template.docx is in the project root.'})
 
-        # Build the first practical from the template
-        final_doc = Document(template_path)
+        # Build the first practical using docxtpl (preserves all formatting)
         first_data = base_data.copy()
         first_data['practical_no'] = 1
         first_data['titleffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'] = titles[0]
-        replace_text_in_doc(final_doc, first_data)
 
-        # For each additional practical, deep-copy the template, replace, and append
+        tpl = DocxTemplate(template_path)
+        tpl.render(first_data)
+
+        # Save the rendered first page, then reopen as a standard Document for merging
+        temp_first = 'temp/first_page.docx'
+        tpl.save(temp_first)
+        final_doc = Document(temp_first)
+
+        # For each additional practical, render via docxtpl and append
         for i in range(1, count):
             # Add a page break before the next practical
             final_doc.add_page_break()
 
-            tmp_doc = Document(template_path)
             page_data = base_data.copy()
             page_data['practical_no'] = i + 1
             page_data['titleffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'] = titles[i]
-            replace_text_in_doc(tmp_doc, page_data)
+
+            tmp_tpl = DocxTemplate(template_path)
+            tmp_tpl.render(page_data)
 
             # Find section properties in final_doc to insert before it
             final_sect_pr = None
@@ -108,8 +90,8 @@ def generate():
                     final_sect_pr = child
                     break
 
-            # Append all body elements from tmp_doc into final_doc before sectPr
-            for element in tmp_doc.element.body:
+            # Append all body elements from rendered template into final_doc before sectPr
+            for element in tmp_tpl.element.body:
                 if element.tag.endswith('sectPr'):
                     continue
                 if final_sect_pr is not None:
@@ -129,6 +111,10 @@ def generate():
         else:
             # For Linux / Docker execution (using LibreOffice)
             subprocess.run(['libreoffice', '--headless', '--convert-to', 'pdf', output_docx, '--outdir', 'outputs'])
+
+        # Clean up temp files
+        if os.path.exists(temp_first):
+            os.remove(temp_first)
 
         return jsonify({
             'success': True,

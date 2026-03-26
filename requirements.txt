@@ -1,5 +1,6 @@
 Flask
 python-docx
+docxtpl
 lxml
 gunicorn
 docx2pdf; sys_platform == 'win32'
