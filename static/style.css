@@ -1,19 +1,19 @@
 body {
-    background-color: #02343F; /* Deep Navy background */
-    color: #F0EDCC; /* Default light text for body */
+    background-color: #5f4a8b;
+    color: #ffeacd;
     font-family: 'Inter', sans-serif;
     position: relative;
     overflow-x: hidden;
     min-height: 100vh;
 }
 
-/* Modern Animated Background Blobs using deep tones */
+/* Modern Animated Background Blobs */
 .bg-blob-1, .bg-blob-2 {
     position: absolute;
     border-radius: 50%;
     filter: blur(90px);
     z-index: 0;
-    opacity: 0.4;
+    opacity: 0.35;
     animation: floatBlob 12s infinite alternate ease-in-out;
 }
 
@@ -21,14 +21,14 @@ body {
     top: -5%; left: -10%;
     width: 600px; height: 600px;
     max-width: 80vw; max-height: 80vw;
-    background: #034858;
+    background: #7b5ea7;
 }
 
 .bg-blob-2 {
     bottom: -10%; right: -5%;
     width: 700px; height: 700px;
     max-width: 90vw; max-height: 90vw;
-    background: #011E25;
+    background: #3d2d63;
     animation-delay: -6s;
     animation-duration: 15s;
 }
@@ -49,43 +49,42 @@ body {
     100% { background-position: 0% 50%; }
 }
 
-/* Main Card - Cream Glassmorphism */
+/* Main Card - Warm Peach Glassmorphism */
 .card {
-    background: rgba(240, 237, 204, 0.55); /* More transparent for glass effect */
-    backdrop-filter: blur(15px);
-    -webkit-backdrop-filter: blur(15px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: rgba(255, 234, 205, 0.6);
+    backdrop-filter: blur(18px);
+    -webkit-backdrop-filter: blur(18px);
+    border: 1px solid rgba(255, 255, 255, 0.35);
     border-radius: 1.5rem;
     overflow: hidden;
     animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
-    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5) !important;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.25) !important;
     position: relative;
     z-index: 2;
-    color: #02343F; /* Inside card, text is Navy */
+    color: #3d2d63;
 }
 
 .glassmorphism-inner {
-    background: rgba(240, 237, 204, 0.4);
+    background: rgba(255, 234, 205, 0.45);
 }
 
+/* Header Gradient */
 .bg-gradient-primary {
-    /* Header background: slightly lighter subtle navy gradient */
-    background: linear-gradient(135deg, #011E25 0%, #034858 50%, #011E25 100%);
+    background: linear-gradient(135deg, #3d2d63 0%, #5f4a8b 50%, #3d2d63 100%);
     background-size: 200% 200%;
     animation: gradientShift 10s ease infinite;
 }
 
-/* Header Text */
 .bg-gradient-primary.text-white, .bg-gradient-primary h2 {
-    color: #F0EDCC !important;
+    color: #ffeacd !important;
 }
 
 .bg-gradient-primary .text-white-50 {
-    color: rgba(240, 237, 204, 0.7) !important;
+    color: rgba(255, 234, 205, 0.7) !important;
 }
 
 .text-shadow-sm {
-    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
 }
 
 .letter-spacing {
@@ -100,35 +99,35 @@ body {
     transform: scale(1.2) rotate(-10deg);
 }
 
-/* Form Controls - True Glassmorphism effect */
+/* Form Controls - True Glassmorphism */
 .form-control {
     border-radius: 0.75rem;
     padding: 0.8rem 1.2rem;
     border: 1px solid rgba(255, 255, 255, 0.5);
-    border-bottom: 1px solid rgba(2, 52, 63, 0.2);
-    border-right: 1px solid rgba(2, 52, 63, 0.2);
+    border-bottom: 1px solid rgba(95, 74, 139, 0.2);
+    border-right: 1px solid rgba(95, 74, 139, 0.2);
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    background-color: rgba(240, 237, 204, 0.3); 
+    background-color: rgba(255, 234, 205, 0.35);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
-    color: #02343F;
-    box-shadow: inset 0 2px 5px rgba(2, 52, 63, 0.05);
+    color: #3d2d63;
+    box-shadow: inset 0 2px 5px rgba(95, 74, 139, 0.05);
 }
 
 .form-control:focus {
-    border-color: #02343F;
-    background-color: rgba(240, 237, 204, 0.5);
-    box-shadow: 0 0 0 4px rgba(2, 52, 63, 0.15), inset 0 2px 5px rgba(2, 52, 63, 0.05);
+    border-color: #5f4a8b;
+    background-color: rgba(255, 234, 205, 0.55);
+    box-shadow: 0 0 0 4px rgba(95, 74, 139, 0.2), inset 0 2px 5px rgba(95, 74, 139, 0.05);
     transform: translateY(-2px);
 }
 
 .form-control::placeholder {
-    color: rgba(2, 52, 63, 0.5);
+    color: rgba(61, 45, 99, 0.5);
 }
 
-/* Sections */
+/* Section Titles */
 .section-title {
-    color: #02343F;
+    color: #5f4a8b;
     font-weight: 800;
     position: relative;
     display: inline-block;
@@ -140,7 +139,7 @@ body {
     position: absolute;
     bottom: 0; left: 0;
     width: 30%; height: 4px;
-    background: #02343F;
+    background: linear-gradient(90deg, #5f4a8b, #7b5ea7);
     border-radius: 2px;
     transition: width 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
 }
@@ -158,8 +157,8 @@ body {
 }
 
 .btn-primary {
-    background: #02343F;
-    color: #F0EDCC;
+    background: linear-gradient(135deg, #5f4a8b 0%, #7b5ea7 100%);
+    color: #ffeacd;
     border: none;
     position: relative;
     overflow: hidden;
@@ -169,7 +168,7 @@ body {
     content: '';
     position: absolute;
     top: 0; left: -100%; width: 100%; height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(240,237,204,0.15), transparent);
+    background: linear-gradient(90deg, transparent, rgba(255, 234, 205, 0.2), transparent);
     transition: left 0.5s ease;
 }
 
@@ -179,27 +178,32 @@ body {
 
 .btn-primary:hover {
     transform: translateY(-4px) scale(1.02);
-    box-shadow: 0 12px 25px rgba(2, 52, 63, 0.4) !important;
-    background: #034858;
-    color: #F0EDCC;
+    box-shadow: 0 12px 25px rgba(95, 74, 139, 0.5) !important;
+    background: linear-gradient(135deg, #7b5ea7 0%, #9474c4 100%);
+    color: #ffeacd;
 }
 
 .btn-outline-secondary {
-    border: 2px solid #02343F;
-    color: #02343F;
+    border: 2px solid #5f4a8b;
+    color: #5f4a8b;
 }
 .btn-outline-secondary:hover {
     transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(2, 52, 63, 0.15);
-    background: #02343F;
-    color: #F0EDCC;
+    box-shadow: 0 8px 20px rgba(95, 74, 139, 0.2);
+    background: #5f4a8b;
+    color: #ffeacd;
 }
 
 hr {
-    border-color: #02343F;
+    border-color: #5f4a8b;
     margin-top: 0.8rem;
     margin-bottom: 2rem;
-    opacity: 0.2;
+    opacity: 0.15;
+}
+
+.card-body {
+    position: relative;
+    min-height: 400px;
 }
 
 /* Loading Overlay Glass */
@@ -209,7 +213,7 @@ hr {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: rgba(240, 237, 204, 0.85);
+    background-color: rgba(255, 234, 205, 0.8);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     z-index: 10;
@@ -217,14 +221,14 @@ hr {
 }
 
 #loading-overlay h4 {
-    color: #02343F !important;
+    color: #3d2d63 !important;
 }
 
 .spinner-border {
-    color: #02343F !important;
+    color: #5f4a8b !important;
 }
 
-/* Staggered dynamic inputs fade */
+/* Staggered dynamic inputs */
 .dynamic-field {
     opacity: 0;
     animation: dynamicPopIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
@@ -235,33 +239,33 @@ hr {
     100% { opacity: 1; transform: scale(1) translateY(0); }
 }
 
-/* Success State pop */
+/* Success State */
 #success-state i {
     animation: scaleElastic 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-    color: #02343F !important;
+    color: #5f4a8b !important;
 }
 
 #success-state h3 {
-    color: #02343F;
+    color: #3d2d63;
 }
 
 #success-state #download-pdf-btn {
-    background: #02343F;
-    color: #F0EDCC;
+    background: #5f4a8b;
+    color: #ffeacd;
     border: none;
 }
 #success-state #download-pdf-btn:hover {
-    background: #034858;
+    background: #7b5ea7;
 }
 
 #success-state #download-docx-btn {
     background: transparent;
-    color: #02343F;
-    border: 2px solid #02343F;
+    color: #5f4a8b;
+    border: 2px solid #5f4a8b;
 }
 #success-state #download-docx-btn:hover {
-    background: #02343F;
-    color: #F0EDCC;
+    background: #5f4a8b;
+    color: #ffeacd;
 }
 
 @keyframes scaleElastic {
@@ -271,12 +275,12 @@ hr {
 }
 
 .text-muted, .text-secondary {
-    color: rgba(2, 52, 63, 0.7) !important;
+    color: rgba(61, 45, 99, 0.7) !important;
 }
 
-/* Footer light text against dark body */
+/* Footer */
 footer, footer small, footer .text-secondary {
-    color: rgba(240, 237, 204, 0.8) !important;
+    color: rgba(255, 234, 205, 0.8) !important;
 }
 
 /* --- Mobile Responsiveness --- */
