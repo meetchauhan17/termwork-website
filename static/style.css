@@ -20,12 +20,14 @@ body {
 .bg-blob-1 {
     top: -5%; left: -10%;
     width: 600px; height: 600px;
+    max-width: 80vw; max-height: 80vw;
     background: #034858;
 }
 
 .bg-blob-2 {
     bottom: -10%; right: -5%;
     width: 700px; height: 700px;
+    max-width: 90vw; max-height: 90vw;
     background: #011E25;
     animation-delay: -6s;
     animation-duration: 15s;
@@ -275,4 +277,27 @@ hr {
 /* Footer light text against dark body */
 footer, footer small, footer .text-secondary {
     color: rgba(240, 237, 204, 0.8) !important;
+}
+
+/* --- Mobile Responsiveness --- */
+@media (max-width: 768px) {
+    body {
+        font-size: 0.95rem;
+    }
+    .card {
+        border-radius: 1rem;
+    }
+    .section-title {
+        font-size: 1.25rem;
+    }
+    .section-title::after {
+        width: 50%;
+    }
+    .form-control {
+        padding: 0.7rem 1rem;
+    }
+    .btn {
+        padding: 0.75rem 1rem;
+        width: 100%;
+    }
 }
