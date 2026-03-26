@@ -1,39 +1,39 @@
 body {
-    background-color: #F0EDCC;
-    color: #02343F;
+    background-color: #02343F; /* Deep Navy background */
+    color: #F0EDCC; /* Default light text for body */
     font-family: 'Inter', sans-serif;
     position: relative;
     overflow-x: hidden;
     min-height: 100vh;
 }
 
-/* Modern Animated Background Blobs using the dark color */
+/* Modern Animated Background Blobs using deep tones */
 .bg-blob-1, .bg-blob-2 {
     position: absolute;
     border-radius: 50%;
-    filter: blur(80px);
+    filter: blur(90px);
     z-index: 0;
-    opacity: 0.15;
+    opacity: 0.4;
     animation: floatBlob 12s infinite alternate ease-in-out;
 }
 
 .bg-blob-1 {
     top: -5%; left: -10%;
     width: 600px; height: 600px;
-    background: #02343F;
+    background: #034858;
 }
 
 .bg-blob-2 {
     bottom: -10%; right: -5%;
     width: 700px; height: 700px;
-    background: #02343F;
+    background: #011E25;
     animation-delay: -6s;
     animation-duration: 15s;
 }
 
 @keyframes floatBlob {
     0% { transform: translate(0, 0) scale(1) rotate(0deg); }
-    100% { transform: translate(80px, 80px) scale(1.15) rotate(10deg); }
+    100% { transform: translate(60px, 60px) scale(1.1) rotate(10deg); }
 }
 
 @keyframes fadeInUp {
@@ -47,32 +47,34 @@ body {
     100% { background-position: 0% 50%; }
 }
 
-/* Glassmorphism Outer Card */
+/* Main Card - Cream Glassmorphism */
 .card {
-    background: rgba(255, 255, 255, 0.7);
+    background: rgba(240, 237, 204, 0.95); /* #F0EDCC with high opacity */
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(2, 52, 63, 0.1);
+    border: 1px solid rgba(240, 237, 204, 0.5);
     border-radius: 1.5rem;
     overflow: hidden;
     animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
-    box-shadow: 0 25px 50px rgba(2, 52, 63, 0.15) !important;
+    box-shadow: 0 30px 60px rgba(0, 0, 0, 0.5) !important;
     position: relative;
     z-index: 2;
+    color: #02343F; /* Inside card, text is Navy */
 }
 
 .glassmorphism-inner {
-    background: rgba(255, 255, 255, 0.6);
+    background: rgba(240, 237, 204, 0.8);
 }
 
 .bg-gradient-primary {
-    background: linear-gradient(135deg, #02343F 0%, #034858 50%, #02343F 100%);
+    /* Header background: slightly lighter subtle navy gradient */
+    background: linear-gradient(135deg, #011E25 0%, #034858 50%, #011E25 100%);
     background-size: 200% 200%;
     animation: gradientShift 10s ease infinite;
 }
 
-/* Override utility text-white because we want F0EDCC text */
-.bg-gradient-primary.text-white {
+/* Header Text */
+.bg-gradient-primary.text-white, .bg-gradient-primary h2 {
     color: #F0EDCC !important;
 }
 
@@ -81,7 +83,7 @@ body {
 }
 
 .text-shadow-sm {
-    text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    text-shadow: 0 2px 4px rgba(0,0,0,0.5);
 }
 
 .letter-spacing {
@@ -96,21 +98,25 @@ body {
     transform: scale(1.2) rotate(-10deg);
 }
 
-/* Form Controls with Modern Glow */
+/* Form Controls - tinted cream glass */
 .form-control {
     border-radius: 0.75rem;
     padding: 0.8rem 1.2rem;
-    border: 2px solid rgba(2, 52, 63, 0.1);
+    border: 2px solid rgba(2, 52, 63, 0.2);
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    background-color: rgba(255, 255, 255, 0.9);
+    background-color: rgba(240, 237, 204, 0.4); 
     color: #02343F;
 }
 
 .form-control:focus {
     border-color: #02343F;
-    background-color: #ffffff;
+    background-color: #F0EDCC;
     box-shadow: 0 0 0 5px rgba(2, 52, 63, 0.15);
     transform: translateY(-2px);
+}
+
+.form-control::placeholder {
+    color: rgba(2, 52, 63, 0.5);
 }
 
 /* Sections */
@@ -152,12 +158,11 @@ body {
     overflow: hidden;
 }
 
-/* Button pulse effect on hover */
 .btn-primary::before {
     content: '';
     position: absolute;
     top: 0; left: -100%; width: 100%; height: 100%;
-    background: linear-gradient(90deg, transparent, rgba(240,237,204,0.2), transparent);
+    background: linear-gradient(90deg, transparent, rgba(240,237,204,0.15), transparent);
     transition: left 0.5s ease;
 }
 
@@ -169,7 +174,7 @@ body {
     transform: translateY(-4px) scale(1.02);
     box-shadow: 0 12px 25px rgba(2, 52, 63, 0.4) !important;
     background: #034858;
-    color: #ffffff;
+    color: #F0EDCC;
 }
 
 .btn-outline-secondary {
@@ -187,7 +192,7 @@ hr {
     border-color: #02343F;
     margin-top: 0.8rem;
     margin-bottom: 2rem;
-    opacity: 0.15;
+    opacity: 0.2;
 }
 
 /* Loading Overlay Glass */
@@ -197,11 +202,19 @@ hr {
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: rgba(240, 237, 204, 0.8);
+    background-color: rgba(240, 237, 204, 0.85);
     backdrop-filter: blur(12px);
     -webkit-backdrop-filter: blur(12px);
     z-index: 10;
     border-radius: 0 0 1.5rem 1.5rem;
+}
+
+#loading-overlay h4 {
+    color: #02343F !important;
+}
+
+.spinner-border {
+    color: #02343F !important;
 }
 
 /* Staggered dynamic inputs fade */
@@ -221,6 +234,10 @@ hr {
     color: #02343F !important;
 }
 
+#success-state h3 {
+    color: #02343F;
+}
+
 #success-state #download-pdf-btn {
     background: #02343F;
     color: #F0EDCC;
@@ -230,6 +247,16 @@ hr {
     background: #034858;
 }
 
+#success-state #download-docx-btn {
+    background: transparent;
+    color: #02343F;
+    border: 2px solid #02343F;
+}
+#success-state #download-docx-btn:hover {
+    background: #02343F;
+    color: #F0EDCC;
+}
+
 @keyframes scaleElastic {
     0% { transform: scale(0); opacity: 0; }
     50% { transform: scale(1.2); }
@@ -237,5 +264,10 @@ hr {
 }
 
 .text-muted, .text-secondary {
-    color: rgba(2, 52, 63, 0.6) !important;
+    color: rgba(2, 52, 63, 0.7) !important;
+}
+
+/* Footer light text against dark body */
+footer, footer small, footer .text-secondary {
+    color: rgba(240, 237, 204, 0.8) !important;
 }
