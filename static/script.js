@@ -138,6 +138,13 @@ document.addEventListener('DOMContentLoaded', () => {
             if (result.success) {
                 // Show Success State
                 successState.classList.remove('d-none');
+
+                // Restart Lottie animation so it plays now (not while hidden)
+                const lottieEl = successState.querySelector('lottie-player');
+                if (lottieEl) {
+                    lottieEl.seek(0);
+                    lottieEl.play();
+                }
                 
                 // Update buttons with download URLs
                 document.getElementById('download-pdf-btn').href = result.download_pdf;
