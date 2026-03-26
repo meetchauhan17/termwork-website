@@ -12,6 +12,8 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Lottie Player -->
+    <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 </head>
 <body>
 
@@ -188,8 +190,8 @@
 
                     <!-- Success State -->
                     <div id="success-state" class="d-none text-center py-4 py-md-5">
-                        <div class="mb-4">
-                            <i class="fa-solid fa-circle-check" style="font-size: 4rem; font-size: clamp(3rem, 10vw, 5rem);"></i>
+                        <div class="mb-3">
+                            <lottie-player src="/static/success.json" background="transparent" speed="1" style="width: 180px; height: 180px; margin: 0 auto;" loop autoplay></lottie-player>
                         </div>
                         <h3 class="fw-bold mb-3 fs-4 fs-md-3">Generation Complete!</h3>
                         <p class="text-muted mb-4 small">Your termwork has been generated successfully.</p>
