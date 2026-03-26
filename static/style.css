@@ -49,10 +49,10 @@ body {
 
 /* Main Card - Cream Glassmorphism */
 .card {
-    background: rgba(240, 237, 204, 0.95); /* #F0EDCC with high opacity */
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(240, 237, 204, 0.5);
+    background: rgba(240, 237, 204, 0.55); /* More transparent for glass effect */
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
     border-radius: 1.5rem;
     overflow: hidden;
     animation: fadeInUp 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
@@ -63,7 +63,7 @@ body {
 }
 
 .glassmorphism-inner {
-    background: rgba(240, 237, 204, 0.8);
+    background: rgba(240, 237, 204, 0.4);
 }
 
 .bg-gradient-primary {
@@ -98,20 +98,25 @@ body {
     transform: scale(1.2) rotate(-10deg);
 }
 
-/* Form Controls - tinted cream glass */
+/* Form Controls - True Glassmorphism effect */
 .form-control {
     border-radius: 0.75rem;
     padding: 0.8rem 1.2rem;
-    border: 2px solid rgba(2, 52, 63, 0.2);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    border-bottom: 1px solid rgba(2, 52, 63, 0.2);
+    border-right: 1px solid rgba(2, 52, 63, 0.2);
     transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    background-color: rgba(240, 237, 204, 0.4); 
+    background-color: rgba(240, 237, 204, 0.3); 
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
     color: #02343F;
+    box-shadow: inset 0 2px 5px rgba(2, 52, 63, 0.05);
 }
 
 .form-control:focus {
     border-color: #02343F;
-    background-color: #F0EDCC;
-    box-shadow: 0 0 0 5px rgba(2, 52, 63, 0.15);
+    background-color: rgba(240, 237, 204, 0.5);
+    box-shadow: 0 0 0 4px rgba(2, 52, 63, 0.15), inset 0 2px 5px rgba(2, 52, 63, 0.05);
     transform: translateY(-2px);
 }
 
