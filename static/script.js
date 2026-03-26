@@ -1,6 +1,7 @@
 document.addEventListener('DOMContentLoaded', () => {
     // DOM Elements
-    const practicalCountInput = document.getElementById('practical-count');
+    const practicalStartInput = document.getElementById('practical-start');
+    const practicalEndInput = document.getElementById('practical-end');
     const titlesContainer = document.getElementById('dynamic-titles-container');
     const alertContainer = document.getElementById('alert-container');
     const loadDataBtn = document.getElementById('btn-load-data');
@@ -40,15 +41,18 @@ document.addEventListener('DOMContentLoaded', () => {
         classCombined.value = parts.filter(p => p).join('-');
     }
     
-    // Dynamically generate practical titles based on number input
-    practicalCountInput.addEventListener('input', (e) => {
-        const count = parseInt(e.target.value) || 0;
+    // Dynamically generate practical titles based on start/end range
+    function generateTitleFields() {
+        const start = parseInt(practicalStartInput.value) || 0;
+        const end = parseInt(practicalEndInput.value) || 0;
         let html = '';
         
-        if (count > 0 && count <= 50) {
+        if (start > 0 && end >= start && (end - start + 1) <= 50) {
             html += '<h6 class="w-100 fw-bold mt-2 mb-3 text-secondary">Practical Titles (Optional)</h6>';
-            for (let i = 1; i <= count; i++) {
-                let delay = Math.min(i * 0.05, 0.5); // Stagger fade-in delay
+            let idx = 0;
+            for (let i = start; i <= end; i++) {
+                idx++;
+                let delay = Math.min(idx * 0.05, 0.5);
                 html += `
                 <div class="col-md-6 mb-3 dynamic-field" style="animation-delay: ${delay}s">
                     <label class="form-label text-muted small fw-bold">Experiment ${i} Title</label>
@@ -56,11 +60,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 </div>
                 `;
             }
-        } else if (count > 50) {
-            html = '<div class="alert alert-warning w-100"><i class="fa-solid fa-triangle-exclamation me-2"></i> Maximum 50 practicals allowed.</div>';
+        } else if (end > 0 && start > 0 && (end - start + 1) > 50) {
+            html = '<div class="alert alert-warning w-100"><i class="fa-solid fa-triangle-exclamation me-2"></i> Maximum 50 practicals allowed at once.</div>';
         }
         titlesContainer.innerHTML = html;
-    });
+    }
+
+    practicalStartInput.addEventListener('input', generateTitleFields);
+    practicalEndInput.addEventListener('input', generateTitleFields);
 
     // Save and Load from Local Storage
     function saveFormData(currentForm) {
@@ -83,8 +90,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 const input = document.querySelector(`[name="${key}"]`);
                 if (input) {
                     input.value = dataObj[key];
-                    // Trigger input event to generate titles if it's the count field
-                    if (key === 'practical_count') {
+                    // Trigger input event to generate titles if it's a range field
+                    if (key === 'practical_start' || key === 'practical_end') {
                         input.dispatchEvent(new Event('input'));
                     }
                 }
@@ -156,7 +163,7 @@ document.addEventListener('DOMContentLoaded', () => {
         successState.classList.add('d-none');
         form.classList.remove('d-none');
         form.reset();
-        document.getElementById('practical-count').dispatchEvent(new Event('input'));
+        document.getElementById('practical-start').dispatchEvent(new Event('input'));
     });
 
     function showAlert(message, type) {

@@ -43,15 +43,19 @@ def generate():
             "checked_by": form.get('checked_by', '')
         }
 
-        count = int(form.get('practical_count', 0))
-        if count == 0:
-            return jsonify({'success': False, 'message': 'Number of practicals must be greater than 0.'})
+        practical_start = int(form.get('practical_start', 0))
+        practical_end = int(form.get('practical_end', 0))
+        if practical_start == 0 or practical_end == 0 or practical_end < practical_start:
+            return jsonify({'success': False, 'message': 'Please enter valid Start and End practical numbers.'})
+
+        count = practical_end - practical_start + 1
+        practical_numbers = list(range(practical_start, practical_end + 1))
 
         titles = []
-        for i in range(1, count + 1):
-            title = form.get(f'title_{i}', '').strip()
+        for num in practical_numbers:
+            title = form.get(f'title_{num}', '').strip()
             if not title:
-                title = f'Experiment {i}'
+                title = f'Experiment {num}'
             titles.append(title)
 
         template_path = 'template.docx'
@@ -60,7 +64,7 @@ def generate():
 
         # Build the first practical using docxtpl (preserves all formatting)
         first_data = base_data.copy()
-        first_data['practical_no'] = 1
+        first_data['practical_no'] = practical_numbers[0]
         first_data['titleffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'] = titles[0]
 
         tpl = DocxTemplate(template_path)
@@ -72,10 +76,10 @@ def generate():
         final_doc = Document(temp_first)
 
         # For each additional practical, render via docxtpl and append
-        for i in range(1, count):
+        for idx in range(1, count):
             page_data = base_data.copy()
-            page_data['practical_no'] = i + 1
-            page_data['titleffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'] = titles[i]
+            page_data['practical_no'] = practical_numbers[idx]
+            page_data['titleffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'] = titles[idx]
 
             tmp_tpl = DocxTemplate(template_path)
             tmp_tpl.render(page_data)
