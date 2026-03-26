@@ -9,6 +9,37 @@ document.addEventListener('DOMContentLoaded', () => {
     const successState = document.getElementById('success-state');
     const createAnotherBtn = document.getElementById('btn-create-another');
     
+    // === Class Dropdown Logic ===
+    const classParts = ['class-branch', 'class-year', 'class-section'];
+    const classCombined = document.getElementById('class-combined');
+
+    // Show/hide custom input when "Custom" is selected
+    classParts.forEach(id => {
+        const select = document.getElementById(id);
+        const customInput = document.getElementById(id + '-custom');
+        
+        select.addEventListener('change', () => {
+            if (select.value === 'custom') {
+                customInput.classList.remove('d-none');
+                customInput.focus();
+            } else {
+                customInput.classList.add('d-none');
+                customInput.value = '';
+            }
+            updateClassCombined();
+        });
+        customInput.addEventListener('input', updateClassCombined);
+    });
+
+    function updateClassCombined() {
+        const parts = classParts.map(id => {
+            const select = document.getElementById(id);
+            const customInput = document.getElementById(id + '-custom');
+            return select.value === 'custom' ? customInput.value.trim() : (select.value || '');
+        });
+        classCombined.value = parts.filter(p => p).join('-');
+    }
+    
     // Dynamically generate practical titles based on number input
     practicalCountInput.addEventListener('input', (e) => {
         const count = parseInt(e.target.value) || 0;

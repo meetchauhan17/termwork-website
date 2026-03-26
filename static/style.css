@@ -121,6 +121,13 @@ body {
     transform: translateY(-2px);
 }
 
+select.form-control {
+    padding: 0.6rem 0.8rem;
+    cursor: pointer;
+    appearance: auto;
+    font-size: 0.9rem;
+}
+
 .form-control::placeholder {
     color: rgba(61, 45, 99, 0.5);
 }

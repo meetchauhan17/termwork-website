@@ -51,7 +51,70 @@
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label fw-semibold">Class</label>
-                                <input type="text" class="form-control" name="class" placeholder="e.g. B.Tech CS">
+                                <div class="d-flex gap-2 align-items-start">
+                                    <!-- Branch -->
+                                    <div class="flex-fill">
+                                        <select class="form-control class-part" id="class-branch">
+                                            <option value="" disabled selected>Branch</option>
+                                            <option value="CSE">CSE</option>
+                                            <option value="IT">IT</option>
+                                            <option value="CE">CE</option>
+                                            <option value="CHEM">CHEM</option>
+                                            <option value="MECH">MECH</option>
+                                            <option value="CIVIL">CIVIL</option>
+                                            <option value="ECE">ECE</option>
+                                            <option value="EE">EE</option>
+                                            <option value="AI">AI</option>
+                                            <option value="DS">DS</option>
+                                            <option value="custom">Custom</option>
+                                        </select>
+                                        <input type="text" class="form-control mt-1 d-none" id="class-branch-custom" placeholder="Type...">
+                                    </div>
+                                    <!-- Year -->
+                                    <div class="flex-fill">
+                                        <select class="form-control class-part" id="class-year">
+                                            <option value="" disabled selected>Year</option>
+                                            <option value="21">21</option>
+                                            <option value="22">22</option>
+                                            <option value="23">23</option>
+                                            <option value="24">24</option>
+                                            <option value="25">25</option>
+                                            <option value="26">26</option>
+                                            <option value="27">27</option>
+                                            <option value="28">28</option>
+                                            <option value="29">29</option>
+                                            <option value="30">30</option>
+                                            <option value="31">31</option>
+                                            <option value="32">32</option>
+                                            <option value="33">33</option>
+                                            <option value="34">34</option>
+                                            <option value="35">35</option>
+                                            <option value="36">36</option>
+                                            <option value="37">37</option>
+                                            <option value="38">38</option>
+                                            <option value="39">39</option>
+                                            <option value="40">40</option>
+                                            <option value="custom">Custom</option>
+                                        </select>
+                                        <input type="text" class="form-control mt-1 d-none" id="class-year-custom" placeholder="Type...">
+                                    </div>
+                                    <!-- Section -->
+                                    <div class="flex-fill">
+                                        <select class="form-control class-part" id="class-section">
+                                            <option value="" disabled selected>Sec</option>
+                                            <option value="A">A</option>
+                                            <option value="B">B</option>
+                                            <option value="C">C</option>
+                                            <option value="D">D</option>
+                                            <option value="E">E</option>
+                                            <option value="F">F</option>
+                                            <option value="custom">Custom</option>
+                                        </select>
+                                        <input type="text" class="form-control mt-1 d-none" id="class-section-custom" placeholder="Type...">
+                                    </div>
+                                </div>
+                                <!-- Hidden field that stores the combined value -->
+                                <input type="hidden" name="class" id="class-combined">
                             </div>
                             <div class="col-md-4">
                                 <label class="form-label fw-semibold">Batch</label>
