@@ -10,6 +10,33 @@ document.addEventListener('DOMContentLoaded', () => {
     const successState = document.getElementById('success-state');
     const createAnotherBtn = document.getElementById('btn-create-another');
     
+    // === Theme Toggle Logic ===
+    const themeToggleBtn = document.getElementById('theme-toggle');
+    const themeIcon = document.getElementById('theme-icon');
+    
+    // Check local storage for preference
+    const currentTheme = localStorage.getItem('theme');
+    if (currentTheme === 'light') {
+        document.body.classList.add('light-mode');
+        themeIcon.classList.remove('fa-sun');
+        themeIcon.classList.add('fa-moon');
+    }
+
+    themeToggleBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        document.body.classList.toggle('light-mode');
+        let theme = 'dark';
+        if (document.body.classList.contains('light-mode')) {
+            theme = 'light';
+            themeIcon.classList.remove('fa-sun');
+            themeIcon.classList.add('fa-moon');
+        } else {
+            themeIcon.classList.remove('fa-moon');
+            themeIcon.classList.add('fa-sun');
+        }
+        localStorage.setItem('theme', theme);
+    });
+
     // === Class Dropdown Logic ===
     const classParts = ['class-branch', 'class-year', 'class-section'];
     const classCombined = document.getElementById('class-combined');
