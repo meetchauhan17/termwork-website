@@ -58,47 +58,57 @@ def generate():
                 title = f'Experiment {num}'
             titles.append(title)
 
-        template_path = 'template.docx'
-        if not os.path.exists(template_path):
-            return jsonify({'success': False, 'message': 'Template file not found. Please ensure template.docx is in the project root.'})
-
-        # Build the first practical using docxtpl (preserves all formatting)
-        first_data = base_data.copy()
-        first_data['practical_no'] = practical_numbers[0]
-        first_data['titleeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'] = titles[0]
-
-        tpl = DocxTemplate(template_path)
-        tpl.render(first_data)
-
-        # Save the rendered first page, then reopen as a standard Document for merging
-        temp_first = 'temp/first_page.docx'
-        tpl.save(temp_first)
-        final_doc = Document(temp_first)
-
-        # For each additional practical, render via docxtpl and append
-        for idx in range(1, count):
+        # Helper to render a single page based on title length
+        def render_practical_page(practical_idx, title):
             page_data = base_data.copy()
-            page_data['practical_no'] = practical_numbers[idx]
-            page_data['titleeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'] = titles[idx]
+            page_data['practical_no'] = practical_numbers[practical_idx]
+            
+            # 8.5cm max length is roughly 45 characters depending on font size
+            threshold = 45 
+            
+            if len(title) > threshold:
+                tpl_path = 'template.docx'
+                page_data['titleeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'] = title
+            else:
+                tpl_path = 'template1.docx'
+                page_data['title'] = title
+                
+            if not os.path.exists(tpl_path):
+                raise FileNotFoundError(f"Template '{tpl_path}' is missing.")
+                
+            tpl = DocxTemplate(tpl_path)
+            tpl.render(page_data)
+            return tpl
+            
+        try:
+            # Render first page to initialize the final document
+            first_tpl = render_practical_page(0, titles[0])
+            temp_first = 'temp/first_page.docx'
+            first_tpl.save(temp_first)
+            final_doc = Document(temp_first)
+            
+            # Append subsequent pages
+            for idx in range(1, count):
+                page_tpl = render_practical_page(idx, titles[idx])
+                
+                # Find section properties in final_doc to insert before it
+                final_sect_pr = None
+                for child in final_doc.element.body:
+                    if child.tag.endswith('sectPr'):
+                        final_sect_pr = child
+                        break
 
-            tmp_tpl = DocxTemplate(template_path)
-            tmp_tpl.render(page_data)
-
-            # Find section properties in final_doc to insert before it
-            final_sect_pr = None
-            for child in final_doc.element.body:
-                if child.tag.endswith('sectPr'):
-                    final_sect_pr = child
-                    break
-
-            # Append all body elements from rendered template into final_doc before sectPr
-            for element in tmp_tpl.element.body:
-                if element.tag.endswith('sectPr'):
-                    continue
-                if final_sect_pr is not None:
-                    final_sect_pr.addprevious(copy.deepcopy(element))
-                else:
-                    final_doc.element.body.append(copy.deepcopy(element))
+                # Append all body elements from rendered template into final_doc before sectPr
+                for element in page_tpl.element.body:
+                    if element.tag.endswith('sectPr'):
+                        continue
+                    if final_sect_pr is not None:
+                        final_sect_pr.addprevious(copy.deepcopy(element))
+                    else:
+                        final_doc.element.body.append(copy.deepcopy(element))
+                        
+        except FileNotFoundError as fnf_err:
+            return jsonify({'success': False, 'message': str(fnf_err)})
 
         output_docx = 'outputs/Termwork.docx'
         output_pdf = 'outputs/Termwork.pdf'
