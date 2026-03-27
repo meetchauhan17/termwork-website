@@ -37,6 +37,25 @@ document.addEventListener('DOMContentLoaded', () => {
         localStorage.setItem('theme', theme);
     });
 
+    // === Mouse Spotlight Effect ===
+    const cards = document.querySelectorAll('.card');
+    cards.forEach(card => {
+        card.addEventListener('mousemove', e => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            card.style.setProperty('--mouse-x', `${x}px`);
+            card.style.setProperty('--mouse-y', `${y}px`);
+        });
+    });
+
+    // === Staggered Reveal Animation for Form Elements ===
+    const formElements = document.querySelectorAll('.col-md-6, .col-md-4, .col-md-12, .col-12:not(:first-child)');
+    formElements.forEach((el, index) => {
+        el.classList.add('reveal-item');
+        el.style.animationDelay = `${index * 0.05}s`;
+    });
+
     // === Class Dropdown Logic ===
     const classParts = ['class-branch', 'class-year', 'class-section'];
     const classCombined = document.getElementById('class-combined');

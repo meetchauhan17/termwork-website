@@ -606,3 +606,65 @@ body.light-mode .btn-outline-secondary:hover {
     color: #7f5af0;
     background: rgba(127, 90, 240, 0.05);
 }
+
+/* === Animated Text Gradient === */
+.animated-gradient-text {
+    background: linear-gradient(to right, #ffffff, #c7d2fe, #fbcfe8, #ffffff);
+    background-size: 300% auto;
+    color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+    animation: textGradient 6s linear infinite;
+    display: inline-block;
+}
+
+@keyframes textGradient {
+    0% { background-position: 0% center; }
+    100% { background-position: 300% center; }
+}
+
+body.light-mode .animated-gradient-text {
+    background: linear-gradient(to right, #111827, #4338ca, #be123c, #111827);
+    background-size: 300% auto;
+    color: transparent;
+    -webkit-background-clip: text;
+    background-clip: text;
+}
+body.light-mode #pdf-icon {
+    color: #4338ca !important;
+}
+
+/* === Mouse Tracking Spotlight === */
+.card::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: radial-gradient(800px circle at var(--mouse-x, -200%) var(--mouse-y, -200%), rgba(255, 255, 255, 0.08), transparent 40%);
+    pointer-events: none;
+    z-index: 10;
+    border-radius: inherit;
+    transition: opacity 0.4s ease;
+    opacity: 0;
+}
+.card:hover::after {
+    opacity: 1;
+}
+body.light-mode .card::after {
+    background: radial-gradient(800px circle at var(--mouse-x, -200%) var(--mouse-y, -200%), rgba(0, 0, 0, 0.04), transparent 40%);
+}
+
+/* === Staggered Reveal Animation === */
+.reveal-item {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: revealUp 0.6s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+}
+
+@keyframes revealUp {
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Enhanced Click Ripple */
+.btn:active {
+    transform: scale(0.96) !important;
+}
