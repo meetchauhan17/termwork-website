@@ -23,6 +23,13 @@ def home():
     return render_template('index.html')
 
 
+@app.route('/keep-alive')
+def keep_alive():
+    """Lightweight endpoint for UptimeRobot to ping and prevent Render from sleeping."""
+    return "I am awake!", 200
+
+
+
 @app.route('/generate', methods=['POST'])
 def generate():
     try:
