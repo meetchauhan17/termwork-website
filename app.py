@@ -64,7 +64,7 @@ def generate():
             page_data['practical_no'] = practical_numbers[practical_idx]
             
             # 8.5cm max length is roughly 45 characters depending on font size
-            threshold = 45 
+            threshold = 40 
             
             if len(title) > threshold:
                 tpl_path = 'template.docx'
