@@ -65,7 +65,7 @@ def generate():
         # Build the first practical using docxtpl (preserves all formatting)
         first_data = base_data.copy()
         first_data['practical_no'] = practical_numbers[0]
-        first_data['titleffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'] = titles[0]
+        first_data['titleeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'] = titles[0]
 
         tpl = DocxTemplate(template_path)
         tpl.render(first_data)
@@ -79,7 +79,7 @@ def generate():
         for idx in range(1, count):
             page_data = base_data.copy()
             page_data['practical_no'] = practical_numbers[idx]
-            page_data['titleffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'] = titles[idx]
+            page_data['titleeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'] = titles[idx]
 
             tmp_tpl = DocxTemplate(template_path)
             tmp_tpl.render(page_data)
