@@ -551,60 +551,80 @@ footer, footer small, footer .text-secondary {
 
 /* === Light Mode Overrides === */
 body.light-mode {
-    background-color: #f7f9fa;
-    color: #1e1b2e;
+    background-color: #ffeacd;
+    color: #2d1f5e;
 }
-body.light-mode .bg-blob-1 { background: linear-gradient(135deg, #a5d6a7, #90caf9); opacity: 0.5; }
-body.light-mode .bg-blob-2 { background: linear-gradient(135deg, #ffcc80, #f48fb1); opacity: 0.5; }
-body.light-mode::before { background: linear-gradient(135deg, #90caf9, #ce93d8); opacity: 0.3; }
+body.light-mode .bg-blob-1 { background: linear-gradient(135deg, #7f5af0, #2cb67d); opacity: 0.15; }
+body.light-mode .bg-blob-2 { background: linear-gradient(135deg, #e53170, #7f5af0); opacity: 0.15; }
+body.light-mode::before { background: linear-gradient(135deg, #2cb67d, #7f5af0); opacity: 0.1; }
 body.light-mode .card {
-    background: rgba(255, 255, 255, 0.9);
-    border: 1px solid rgba(0, 0, 0, 0.05);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
-    color: #1a1333;
+    background: rgba(255, 255, 255, 0.85);
+    border: 1px solid rgba(127, 90, 240, 0.3);
+    box-shadow: 0 8px 32px rgba(127, 90, 240, 0.15);
+    color: #2d1f5e;
 }
-body.light-mode .glassmorphism-inner { background: rgba(245, 247, 250, 0.7); }
+body.light-mode .glassmorphism-inner { background: rgba(255, 234, 205, 0.4); }
 body.light-mode .bg-gradient-primary {
-    background: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 40%, #bcccdc 100%);
-    color: #1a1333 !important;
+    background: linear-gradient(135deg, #ffffff 0%, #fef3e1 40%, #ffeacd 100%);
+    color: #7f5af0 !important;
 }
-body.light-mode .bg-gradient-primary h2 { color: #1a1333 !important; }
-body.light-mode .bg-gradient-primary .text-white-50 { color: #627d98 !important; }
+body.light-mode .bg-gradient-primary h2, 
+body.light-mode .bg-gradient-primary .text-white, 
+body.light-mode .bg-gradient-primary .text-white-50 { color: #7f5af0 !important; }
 body.light-mode #theme-toggle {
-    border-color: rgba(0,0,0,0.15) !important;
-    background: rgba(255,255,255,0.5) !important;
-    color: #1a1333 !important;
+    border-color: rgba(127, 90, 240, 0.5) !important;
+    background: rgba(127, 90, 240, 0.1) !important;
+    color: #7f5af0 !important;
 }
-body.light-mode #theme-toggle:hover { background: rgba(0,0,0,0.05) !important; }
+body.light-mode #theme-toggle:hover { background: rgba(127, 90, 240, 0.2) !important; }
 body.light-mode .form-control {
-    background: rgba(255, 255, 255, 0.7);
-    border: 1px solid rgba(0, 0, 0, 0.1);
-    color: #1a1333;
+    background: rgba(255, 255, 255, 0.9);
+    border: 1px solid rgba(127, 90, 240, 0.3);
+    color: #2d1f5e;
     box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 body.light-mode .form-control:focus {
-    background: rgba(255, 255, 255, 0.95);
+    background: #ffffff;
     border-color: #7f5af0;
-    box-shadow: 0 0 0 3px rgba(127, 90, 240, 0.1);
-    color: #1a1333;
+    box-shadow: 0 0 0 3px rgba(127, 90, 240, 0.2);
+    color: #2d1f5e;
 }
-body.light-mode .form-control::placeholder { color: #9cb4cc; }
-body.light-mode .form-label { color: #334e68; }
-body.light-mode .section-title { color: #1a1333; }
-body.light-mode hr { border-color: rgba(0, 0, 0, 0.08); }
+body.light-mode .form-control::placeholder { color: rgba(45, 31, 94, 0.5); }
+body.light-mode .form-label { color: #2d1f5e; font-weight: 600; }
+body.light-mode .section-title { color: #7f5af0; }
+body.light-mode hr { border-color: rgba(127, 90, 240, 0.2); }
 body.light-mode .text-muted, body.light-mode .text-secondary,
-body.light-mode footer, body.light-mode footer small { color: #627d98 !important; }
-body.light-mode #loading-overlay { background: rgba(255, 255, 255, 0.85); }
-body.light-mode #loading-overlay h4, body.light-mode #success-state h3 { color: #1a1333 !important; }
+body.light-mode footer, body.light-mode footer small { color: rgba(45, 31, 94, 0.7) !important; }
+body.light-mode .text-danger { color: #e53170 !important; }
+body.light-mode #loading-overlay { background: rgba(255, 234, 205, 0.85); }
+body.light-mode #loading-overlay h4, body.light-mode #success-state h3 { color: #7f5af0 !important; }
+
+/* Invert Primary Button */
+body.light-mode .btn-primary {
+    background: linear-gradient(135deg, #ffffff 0%, #ffeacd 100%);
+    color: #7f5af0;
+    border: 1px solid rgba(127, 90, 240, 0.4);
+    box-shadow: 0 4px 15px rgba(127, 90, 240, 0.2);
+}
+body.light-mode .btn-primary:before {
+    background: linear-gradient(90deg, transparent, rgba(127, 90, 240, 0.1), transparent);
+}
+body.light-mode .btn-primary:hover {
+    background: linear-gradient(135deg, #ffeacd 0%, #fef3e1 100%);
+    color: #6244c5;
+    box-shadow: 0 8px 30px rgba(127, 90, 240, 0.3);
+    border-color: #7f5af0;
+}
+
 body.light-mode .btn-outline-secondary {
-    border: 1.5px solid rgba(0, 0, 0, 0.15);
-    color: #486581;
+    border: 1.5px solid rgba(127, 90, 240, 0.5);
+    color: #7f5af0;
     background: rgba(255, 255, 255, 0.5);
 }
 body.light-mode .btn-outline-secondary:hover {
     border-color: #7f5af0;
-    color: #7f5af0;
-    background: rgba(127, 90, 240, 0.05);
+    color: #ffeacd;
+    background: #7f5af0;
 }
 
 /* === Animated Text Gradient === */
@@ -624,14 +644,14 @@ body.light-mode .btn-outline-secondary:hover {
 }
 
 body.light-mode .animated-gradient-text {
-    background: linear-gradient(to right, #111827, #4338ca, #be123c, #111827);
+    background: linear-gradient(to right, #7f5af0, #e53170, #2cb67d, #7f5af0);
     background-size: 300% auto;
     color: transparent;
     -webkit-background-clip: text;
     background-clip: text;
 }
 body.light-mode #pdf-icon {
-    color: #4338ca !important;
+    color: #7f5af0 !important;
 }
 
 /* === Mouse Tracking Spotlight === */
@@ -650,7 +670,7 @@ body.light-mode #pdf-icon {
     opacity: 1;
 }
 body.light-mode .card::after {
-    background: radial-gradient(800px circle at var(--mouse-x, -200%) var(--mouse-y, -200%), rgba(0, 0, 0, 0.04), transparent 40%);
+    background: radial-gradient(800px circle at var(--mouse-x, -200%) var(--mouse-y, -200%), rgba(127, 90, 240, 0.08), transparent 40%);
 }
 
 /* === Staggered Reveal Animation === */
