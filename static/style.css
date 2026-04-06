@@ -11,7 +11,7 @@
     --foreground: #1E293B;
     --muted: #F1F5F9;
     --muted-foreground: #64748B;
-    --accent: #8B5CF6; /* Violet */
+    --accent: #10B981; /* Emerald Green */
     --accent-fg: #FFFFFF;
     --secondary: #F472B6; /* Hot Pink */
     --tertiary: #FBBF24; /* Amber */
@@ -445,6 +445,10 @@ hr {
     position: relative;
     overflow: hidden;
     z-index: 1;
+}
+.generate-btn lottie-player {
+    /* Force the widget to pure white so it contrasts against the green button */
+    filter: brightness(0) invert(1) drop-shadow(2px 2px 0px var(--border-color));
 }
 .generate-btn::before {
     content: '';
