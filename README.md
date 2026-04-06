@@ -89,6 +89,12 @@ When submitting the form, the generator will read how many practicals you select
 
 ---
 
+## License
+
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+---
+
 <p align="center">
   Crafted with ❤️ by <a href="https://github.com/meetchauhan17">Meet Chauhan</a>
 </p>
