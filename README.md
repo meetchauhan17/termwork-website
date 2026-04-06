@@ -1,36 +1,71 @@
-# Termwork Generator Pro
+<h1 align="center">
+  <br>
+  Termwork Generator Pro
+  <br>
+</h1>
 
-A complete Flask-based web application to generate multi-page Word and PDF documents from a template dynamically.
+<h4 align="center">A high-performance Flask application that dynamically generates multi-page Word and PDF documents from templates using a beautiful Neo-Memphis interface.</h4>
 
-## Features
-- Dynamic form inputs based on number of practicals requested
-- Word document template replacement (`python-docx`)
-- Proper page duplication & merging (`docxcompose`) 
-- PDF Conversion (`docx2pdf`)
-- Save & Load form data automatically via `localStorage`
-- Modern, clean, and responsive UI built using Bootstrap 5
+<p align="center">
+  <a href="#key-features">Key Features</a> •
+  <a href="#the-design-system">The Design System</a> •
+  <a href="#installation">Installation</a> •
+  <a href="#how-to-use">How To Use</a> •
+  <a href="#troubleshooting">Troubleshooting</a>
+</p>
 
-## Setup Instructions
+---
 
-1. **Install Requirements**
-   Open your terminal inside the `termwork-website` folder and run the command:
+## Key Features
+
+* **Dynamic Document Generation:** Instantly replaces template placeholders (`{{term}}`, `{{name}}`, etc.) based on user form inputs using `python-docx`.
+* **Multi-Page Merging:** Correctly handles multi-page practical assignments utilizing `docxcompose` to merge documents seamlessly without corruption.
+* **Instant PDF Conversion:** Leverages `docx2pdf` to output print-ready formats securely on Windows COM instances.
+* **Smart Persistent Storage:** Utilizes local browser storage (`localStorage`) to auto-save form data securely and recall it instantly via the "Load Last Data" bridge.
+* **Fully Responsive Utility:** Architected utilizing pure CSS constraints and Bootstrap 5 so the application scales perfectly from Ultra-Wide Desktop to narrow Mobile devices.
+* **Cloud Persistence mechanism:** A `keep_alive.py` logic wrapper is implemented guaranteeing remote server deployments (e.g. Render/Heroku) do not sleep during inactivity.
+
+## The Design System
+The frontend has been completely rebuilt using the **"Playful Geometric" (Neo-Memphis)** aesthetic:
+- **High-Fidelity Pop Art:** Replaced soft shadows with hard `4px 4px 0px 0px #1E293B` rigid offsets.
+- **Physical "Squish" Mechanics:** Interacting with inputs and buttons utilizes robust `translate()` and `cubic-bezier` keyframes mimicking realistic sticky mechanics.
+- **Vibrant Accent Layering:** Anchored around Emerald Green (`#10B981`) and Vivid Violet palettes against a classic `#FFFDF5` Paper Canvas.
+
+## Installation
+
+### Prerequisites
+- Python 3.8+
+- Microsoft Word installed (required *specifically* for the `docx2pdf` native COM execution step)
+- Git
+
+### Local Setup
+1. **Clone the repository**
+   ```bash
+   git clone https://github.com/meetchauhan17/termwork-website.git
+   cd termwork-website
+   ```
+
+2. **Install dependencies**
    ```bash
    pip install -r requirements.txt
    ```
 
-2. **Required Template Location**
-   Ensure an actual Word file named `template.docx` exists in the `termwork-website` folder.
-   
-3. **Run the Application**
+3. **Provide the Anchor Template**
+   Ensure an actual Word file named `template.docx` exists in the application root directory alongside `app.py`.
+
+4. **Boot the Application**
    ```bash
    python app.py
    ```
 
-4. **Access UI**
-   Open your browser and navigate to: `http://127.0.0.1:5000`
+5. Access the generator at `http://127.0.0.1:5000`
 
-## Required Template Placeholders
-In your `template.docx`, include the following tags. They will be replaced dynamically:
+---
+
+## How to Use & Placeholder Tags
+
+To have the Python core replace your variables properly, you must use the EXACT curly-brace terminology inside your Microsoft Word `template.docx`:
+
 - `{{term}}`
 - `{{subject}}`
 - `{{name}}`
@@ -42,27 +77,18 @@ In your `template.docx`, include the following tags. They will be replaced dynam
 - `{{title}}`
 - `{{practical_no}}`
 
-## Example Inputs
-- **Name of Student:** Meet Chauhan
-- **PEN:** 190XXXXX
-- **Class:** B.Tech CS
-- **Batch:** B2
-- **Semester:** 6th
-- **Subject:** Cloud Computing
-- **Term:** Even 2024
-- **Checked By:** Prof. Smith
-- **Number of Practicals:** 5
-- **Experiment 1 Title:** Installing AWS CLI
-- **Experiment 2 Title:** Creating EC2 Instance
-- ... and so on.
+When submitting the form, the generator will read how many practicals you selected, clone the anchor template for each title provided, merge the files sequentially, convert it to a PDF via the COM thread, and present a direct download link instantly.
 
-## Error Fixes Guide
-1. **Docx2pdf Freezing / COM Error**
-   - Ensure you are running this on a Windows Machine with Microsoft Office/Word installed, as `docx2pdf` replies on it.
-   - If Flask hangs or throws threading COM errors during conversion, the `pythoncom.CoInitialize()` has been properly integrated into the codebase inside the request route. Make sure `pywin32` is correctly installed via the auto-generated `requirements.txt`.
-2. **"Template file not found" Error**
-   - The app explicitly looks for `template.docx` inside the root folder alongside `app.py`. Check for typos or file extension issues.
-3. **Missing specific styles after generation**
-   - The plugin `docxcompose` manages complex format merging significantly better than manual `lxml` body hacking, preventing files from being corrupt upon download. Ensure not to excessively overlap merged images in tables.
+## Troubleshooting
 
-Enjoy using Termwork Generator Pro!
+>**Docx2pdf Freezing / COM Error**
+> Ensure you are running this on a Windows Machine with Microsoft Office/Word completely installed. If Flask hangs or throws threading COM errors during conversion, our `pythoncom.CoInitialize()` has been properly integrated into the routing logic—just ensure `pywin32` was successfully installed from `requirements.txt`.
+
+> **"Template file not found" Error**
+> The app explicitly looks for `template.docx` inside the root folder alongside `app.py`. Check for typos or file extension `.docx` issues.
+
+---
+
+<p align="center">
+  Crafted with ❤️ by <a href="https://github.com/meetchauhan17">Meet Chauhan</a>
+</p>
