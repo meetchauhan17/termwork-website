@@ -10,30 +10,31 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Custom CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Google Fonts imported via CSS -->
     <!-- Lottie Player -->
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 </head>
 <body>
 
-<!-- Modern Animated Background Elements -->
-<div class="bg-blob-1"></div>
-<div class="bg-blob-2"></div>
+<!-- Neo-Memphis Floating Shapes -->
+<div class="geometric-bg-shapes">
+    <div class="geo-shape circle"></div>
+    <div class="geo-shape triangle"></div>
+    <div class="geo-shape square"></div>
+</div>
+
+
 
 <div class="container py-5 position-relative z-index-1">
     <div class="row justify-content-center">
         <div class="col-lg-10">
-            <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
-                <div class="card-header bg-gradient-primary text-white p-3 p-md-4 text-center border-0 position-relative">
-                    <button id="theme-toggle" class="position-absolute top-0 end-0 m-3 rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px; z-index: 10; border: 1px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: inherit; cursor: pointer; transition: all 0.3s ease;">
-                        <i class="fa-solid fa-sun fs-5" id="theme-icon"></i>
-                    </button>
-                    <h2 class="fw-bold mb-0 fs-4 fs-md-2 animated-gradient-text"><i class="fa-solid fa-file-pdf me-2 hover-bump text-white" id="pdf-icon"></i>Termwork Generator Pro</h2>
-                    <p class="mb-0 mt-2 text-white-50 letter-spacing small">Automate your multi-page termwork in seconds</p>
+            <div class="card p-3 p-md-4">
+                <div class="card-header text-center position-relative">
+                    <h2 class="font-display mb-0 fs-4 fs-md-2"><i class="fa-solid fa-file-pdf me-2 hover-bump" id="pdf-icon" style="color: var(--accent);"></i>Termwork Generator Pro</h2>
+                    <p class="mb-0 mt-2 text-muted letter-spacing small">Automate your multi-page termwork in seconds</p>
                 </div>
                 
-                <div class="card-body p-4 p-md-5 glassmorphism-inner">
+                <div class="card-body p-4 p-md-5">
                     <!-- Status Messages -->
                     <div id="alert-container"></div>
                     
@@ -172,14 +173,14 @@
                         </div>
 
                         <!-- Action Buttons -->
-                        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-5 pt-3 border-top">
+                        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-5 pt-3">
                             <button type="button" class="btn btn-outline-secondary btn-lg px-4 d-inline-flex align-items-center" id="btn-load-data">
                                 <lottie-player src="/static/refresh.json" background="transparent" speed="1" style="width: 28px; height: 28px; display: inline-block; vertical-align: middle;" loop autoplay></lottie-player>
                                 <span class="ms-2">Load Last Data</span>
                             </button>
-                            <button type="submit" class="btn btn-primary btn-lg px-5 shadow text-white" id="btn-generate">
+                            <button type="submit" class="btn btn-primary btn-lg px-5 text-white generate-btn" id="btn-generate">
                                 <lottie-player src="/static/settings.json" background="transparent" speed="1" style="width: 32px; height: 32px; display: inline-block; vertical-align: middle;" loop autoplay></lottie-player>
-                                <span class="ms-1">Generate Termwork</span>
+                                <span class="ms-1 fw-bold fs-5">Generate Termwork</span>
                             </button>
                         </div>
                     </form>
@@ -222,14 +223,15 @@
 </div>
 
 <!-- Footer -->
-<footer class="text-center mt-4 mb-4 text-secondary position-relative z-index-1">
+<footer class="text-center mt-4 mb-4 text-muted position-relative z-index-1">
     <small>
-        &copy; 2026 Crafted with <i class="fa-solid fa-heart text-danger mx-1"></i> by <strong>Meet Chauhan</strong>.<br>
-        <a href="https://github.com/meetchauhan17" target="_blank" class="text-secondary fw-semibold mt-1 d-inline-block hover-bump" style="text-decoration: none;">
+        &copy; 2026 Crafted with <i class="fa-solid fa-heart text-danger mx-1"></i> by <strong class="text-primary" style="color: var(--accent) !important;">Meet Chauhan</strong>.<br>
+        <a href="https://github.com/meetchauhan17" target="_blank" class="text-muted fw-semibold mt-1 d-inline-block hover-bump" style="text-decoration: none;">
             <i class="fa-brands fa-github me-1"></i> Click here to check out my GitHub!
         </a>
     </small>
 </footer>
+
 
 <!-- Bootstrap & Custom JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
