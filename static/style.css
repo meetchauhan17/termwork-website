@@ -94,7 +94,7 @@ body {
     z-index: 10;
 }
 .card:hover {
-    transform: rotate(-1deg) scale(1.02);
+    transform: translateY(-4px) scale(1.01);
     box-shadow: 10px 10px 0px 0px var(--tertiary); /* Switch shadow color on hover */
 }
 .card-header {
@@ -284,9 +284,16 @@ hr {
     transform: translateY(-2px);
 }
 
-/* Micro-interactions (Bounce without rotate) */
+/* Micro-interactions (Wiggle) */
 .hover-bump { display: inline-block; transition: all 0.3s var(--bounce); }
-.card-header:hover .hover-bump { transform: scale(1.1); }
+.card-header:hover .hover-bump { animation: wiggle 0.6s var(--bounce) infinite; }
+
+@keyframes wiggle {
+    0% { transform: rotate(0deg); }
+    25% { transform: rotate(8deg) scale(1.1); }
+    75% { transform: rotate(-8deg) scale(1.1); }
+    100% { transform: rotate(0deg); }
+}
 
 /* Decorative States & Alerts */
 .alert {
