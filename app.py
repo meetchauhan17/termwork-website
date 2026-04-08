@@ -70,13 +70,16 @@ def generate():
             page_data = base_data.copy()
             page_data['practical_no'] = practical_numbers[practical_idx]
             
-            # 8.5cm max length is roughly 45 characters depending on font size
-            threshold = 40 
-            
-            if len(title) > threshold:
+            if len(title) > 100:
+                # Very long title → template2.docx
+                tpl_path = 'template2.docx'
+                page_data['titleeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'] = title
+            elif len(title) > 43:
+                # Medium title → template.docx
                 tpl_path = 'template.docx'
                 page_data['titleeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'] = title
             else:
+                # Short title → template1.docx
                 tpl_path = 'template1.docx'
                 page_data['title'] = title
                 
