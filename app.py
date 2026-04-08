@@ -70,7 +70,7 @@ def generate():
             page_data = base_data.copy()
             page_data['practical_no'] = practical_numbers[practical_idx]
             
-            if len(title) > 100:
+            if len(title) > 120:
                 # Very long title → template2.docx
                 tpl_path = 'template2.docx'
                 page_data['titleeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'] = title
