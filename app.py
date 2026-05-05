@@ -62,7 +62,12 @@ def generate():
         for num in practical_numbers:
             title = form.get(f'title_{num}', '').strip()
             if not title:
-                title = f'Experiment {num}'
+                title = f'ㅤ'
+            # Auto-shorten titles with 200+ characters at the last full stop before 200
+            if len(title) >= 200:
+                cut = title.rfind('.', 0, 200)
+                if cut != -1:
+                    title = title[:cut + 1].strip()
             titles.append(title)
 
         # Helper to render a single page based on title length
@@ -70,7 +75,7 @@ def generate():
             page_data = base_data.copy()
             page_data['practical_no'] = practical_numbers[practical_idx]
             
-            if len(title) > 120:
+            if len(title) > 115:
                 # Very long title → template2.docx
                 tpl_path = 'template2.docx'
                 page_data['titleeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'] = title
