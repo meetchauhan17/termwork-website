@@ -83,11 +83,12 @@ document.addEventListener('DOMContentLoaded', () => {
         const formData = new FormData(currentForm);
         const dataObj = {};
         for (let [key, value] of formData.entries()) {
-            // Don't save individual titles as they generate dynamically based on count
-            if (!key.startsWith('title_')) { 
-                dataObj[key] = value;
-            }
+            dataObj[key] = value;
         }
+        // Also save class dropdown parts separately
+        dataObj['_class_branch'] = document.getElementById('class-branch').value;
+        dataObj['_class_year']   = document.getElementById('class-year').value;
+        dataObj['_class_section']= document.getElementById('class-section').value;
         localStorage.setItem('termworkFormData', JSON.stringify(dataObj));
     }
 
@@ -95,16 +96,51 @@ document.addEventListener('DOMContentLoaded', () => {
         const savedData = localStorage.getItem('termworkFormData');
         if (savedData) {
             const dataObj = JSON.parse(savedData);
+
+            // Restore normal inputs first (skip title_ and private _ keys for now)
             for (const key in dataObj) {
+                if (key.startsWith('_') || key.startsWith('title_')) continue;
                 const input = document.querySelector(`[name="${key}"]`);
                 if (input) {
                     input.value = dataObj[key];
-                    // Trigger input event to generate titles if it's a range field
                     if (key === 'practical_start' || key === 'practical_end') {
                         input.dispatchEvent(new Event('input'));
                     }
                 }
             }
+
+            // Restore class dropdowns
+            const branchSel  = document.getElementById('class-branch');
+            const yearSel    = document.getElementById('class-year');
+            const sectionSel = document.getElementById('class-section');
+            const restoreSelect = (sel, val) => {
+                if (!val) return;
+                // Check if value exists as an option
+                const exists = [...sel.options].some(o => o.value === val);
+                if (exists) {
+                    sel.value = val;
+                } else {
+                    sel.value = 'custom';
+                    const customInput = document.getElementById(sel.id + '-custom');
+                    customInput.value = val;
+                    customInput.classList.remove('d-none');
+                }
+                sel.dispatchEvent(new Event('change'));
+            };
+            restoreSelect(branchSel,  dataObj['_class_branch']);
+            restoreSelect(yearSel,    dataObj['_class_year']);
+            restoreSelect(sectionSel, dataObj['_class_section']);
+            updateClassCombined();
+
+            // Restore title fields after the dynamic fields have been generated
+            setTimeout(() => {
+                for (const key in dataObj) {
+                    if (!key.startsWith('title_')) continue;
+                    const input = document.querySelector(`[name="${key}"]`);
+                    if (input) input.value = dataObj[key];
+                }
+            }, 100);
+
             showAlert('Data loaded from previous session.', 'info');
         } else {
             showAlert('No previous data found.', 'warning');
