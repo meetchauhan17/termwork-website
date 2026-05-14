@@ -20,6 +20,16 @@ A high-performance **Flask** web application that dynamically generates multi-pa
 
 </div>
 
+<div align="center">
+
+### 📸 App Preview
+
+| Full Form View | Practical Configuration |
+|:---:|:---:|
+| ![Homepage](screenshots/homepage.png) | ![Form](screenshots/form_full.png) |
+
+</div>
+
 ---
 
 ## 🌟 What Is This?
