@@ -22,6 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     // === Class Dropdown Logic ===
     const classParts = ['class-branch', 'class-year', 'class-section'];
     const classCombined = document.getElementById('class-combined');
+    const branchCombined = document.getElementById('branch-combined');
 
     // Show/hide custom input when "Custom" is selected
     classParts.forEach(id => {
@@ -47,7 +48,13 @@ document.addEventListener('DOMContentLoaded', () => {
             const customInput = document.getElementById(id + '-custom');
             return select.value === 'custom' ? customInput.value.trim() : (select.value || '');
         });
-        classCombined.value = parts.filter(p => p).join('-');
+        if (classCombined) classCombined.value = parts.filter(p => p).join('-');
+        
+        if (branchCombined) {
+            const branchSel = document.getElementById('class-branch');
+            const branchCustom = document.getElementById('class-branch-custom');
+            branchCombined.value = branchSel.value === 'custom' ? branchCustom.value.trim() : (branchSel.value || '');
+        }
     }
     
     // Dynamically generate practical titles based on start/end range

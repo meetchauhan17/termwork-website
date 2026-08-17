@@ -30,6 +30,75 @@ def keep_alive():
 
 
 
+def get_template_path(branch, title_length):
+    """
+    Select the appropriate Word template based on branch and title length.
+    - title_length <= 43: short title (template1)
+    - 44 <= title_length <= 115: medium title (template)
+    - title_length > 115: long title (template2)
+    
+    Supports branch-specific naming patterns (e.g. template1_it.docx, it_template1.docx,
+    templates_docx/it/template1.docx) with fallback to default CSE templates (template1.docx, template.docx, template2.docx).
+    """
+    branch_key = (branch or 'cse').strip().lower()
+
+    if title_length > 115:
+        category = 'long'
+    elif title_length > 43:
+        category = 'medium'
+    else:
+        category = 'short'
+
+    template_map = {
+        'short': {
+            'candidates': [
+                f'template1_{branch_key}.docx',
+                f'{branch_key}_template1.docx',
+                f'templates_docx/{branch_key}/template1.docx',
+                f'templates/{branch_key}/template1.docx',
+                'template1.docx'
+            ],
+            'title_key': 'title'
+        },
+        'medium': {
+            'candidates': [
+                f'template_{branch_key}.docx',
+                f'{branch_key}_template.docx',
+                f'templates_docx/{branch_key}/template.docx',
+                f'templates/{branch_key}/template.docx',
+                'template.docx'
+            ],
+            'title_key': 'titleeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+        },
+        'long': {
+            'candidates': [
+                f'template2_{branch_key}.docx',
+                f'{branch_key}_template2.docx',
+                f'templates_docx/{branch_key}/template2.docx',
+                f'templates/{branch_key}/template2.docx',
+                'template2.docx'
+            ],
+            'title_key': 'titleeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+        }
+    }
+
+    config = template_map[category]
+    selected_path = None
+    for candidate in config['candidates']:
+        if os.path.exists(candidate):
+            selected_path = candidate
+            break
+
+    if not selected_path:
+        default_file = 'template1.docx' if category == 'short' else ('template2.docx' if category == 'long' else 'template.docx')
+        if os.path.exists(default_file):
+            selected_path = default_file
+        else:
+            raise FileNotFoundError(f"Template for branch '{branch}' ({category} title) not found.")
+
+    return selected_path, config['title_key']
+
+
 @app.route('/generate', methods=['POST'])
 def generate():
     try:
@@ -39,7 +108,14 @@ def generate():
 
         form = request.form
 
+        branch = form.get('branch', '').strip().upper()
+        if not branch:
+            class_val = form.get('class', '').strip().upper()
+            if class_val:
+                branch = class_val.split('-')[0].strip()
+
         base_data = {
+            "branch": branch,
             "term": form.get('term', ''),
             "subject": form.get('subject', ''),
             "pen": form.get('pen', ''),
@@ -70,23 +146,13 @@ def generate():
                     title = title[:cut + 1].strip()
             titles.append(title)
 
-        # Helper to render a single page based on title length
+        # Helper to render a single page based on branch and title length
         def render_practical_page(practical_idx, title):
             page_data = base_data.copy()
             page_data['practical_no'] = practical_numbers[practical_idx]
             
-            if len(title) > 115:
-                # Very long title → template2.docx
-                tpl_path = 'template2.docx'
-                page_data['titleeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'] = title
-            elif len(title) > 43:
-                # Medium title → template.docx
-                tpl_path = 'template.docx'
-                page_data['titleeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'] = title
-            else:
-                # Short title → template1.docx
-                tpl_path = 'template1.docx'
-                page_data['title'] = title
+            tpl_path, title_key = get_template_path(branch, len(title))
+            page_data[title_key] = title
                 
             if not os.path.exists(tpl_path):
                 raise FileNotFoundError(f"Template '{tpl_path}' is missing.")
