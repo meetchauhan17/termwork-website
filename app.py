@@ -37,8 +37,8 @@ def get_template_path(branch, title_length):
     - 44 <= title_length <= 115: medium title (template)
     - title_length > 115: long title (template2)
     
-    Supports branch-specific naming patterns (e.g. template1_it.docx, it_template1.docx,
-    templates_docx/it/template1.docx) with fallback to default CSE templates (template1.docx, template.docx, template2.docx).
+    Supports branch-specific naming patterns (e.g. tempitfor65wordtitle.docx, template_it.docx, template1_it.docx)
+    with fallback to default CSE templates (template1.docx, template.docx, template2.docx).
     """
     branch_key = (branch or 'cse').strip().lower()
 
@@ -49,42 +49,62 @@ def get_template_path(branch, title_length):
     else:
         category = 'short'
 
-    template_map = {
-        'short': {
-            'candidates': [
-                f'template1_{branch_key}.docx',
-                f'{branch_key}_template1.docx',
-                f'templates_docx/{branch_key}/template1.docx',
-                f'templates/{branch_key}/template1.docx',
-                'template1.docx'
-            ],
-            'title_key': 'title'
-        },
-        'medium': {
-            'candidates': [
-                f'template_{branch_key}.docx',
-                f'{branch_key}_template.docx',
-                f'templates_docx/{branch_key}/template.docx',
-                f'templates/{branch_key}/template.docx',
-                'template.docx'
-            ],
-            'title_key': 'titleeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
-        },
-        'long': {
-            'candidates': [
-                f'template2_{branch_key}.docx',
-                f'{branch_key}_template2.docx',
-                f'templates_docx/{branch_key}/template2.docx',
-                f'templates/{branch_key}/template2.docx',
-                'template2.docx'
-            ],
-            'title_key': 'titleeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
-        }
+    it_candidates = {
+        'short': [
+            'template1_it.docx',
+            'it_template1.docx',
+            'tempitfor65wordtitle.docx',
+            'templates_docx/it/template1.docx',
+            'templates/it/template1.docx',
+            'template1.docx'
+        ],
+        'medium': [
+            'tempitfor65wordtitle.docx',
+            'template_it.docx',
+            'it_template.docx',
+            'templates_docx/it/template.docx',
+            'templates/it/template.docx',
+            'template.docx'
+        ],
+        'long': [
+            'template2_it.docx',
+            'it_template2.docx',
+            'tempitfor65wordtitle.docx',
+            'templates_docx/it/template2.docx',
+            'templates/it/template2.docx',
+            'template2.docx'
+        ]
     }
 
-    config = template_map[category]
+    general_candidates = {
+        'short': [
+            f'template1_{branch_key}.docx',
+            f'{branch_key}_template1.docx',
+            f'templates_docx/{branch_key}/template1.docx',
+            f'templates/{branch_key}/template1.docx',
+            'template1.docx'
+        ],
+        'medium': [
+            f'template_{branch_key}.docx',
+            f'{branch_key}_template.docx',
+            f'templates_docx/{branch_key}/template.docx',
+            f'templates/{branch_key}/template.docx',
+            'template.docx'
+        ],
+        'long': [
+            f'template2_{branch_key}.docx',
+            f'{branch_key}_template2.docx',
+            f'templates_docx/{branch_key}/template2.docx',
+            f'templates/{branch_key}/template2.docx',
+            'template2.docx'
+        ]
+    }
+
+    candidates = it_candidates[category] if branch_key == 'it' else general_candidates[category]
+    title_key = 'title' if category == 'short' else 'titleeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+
     selected_path = None
-    for candidate in config['candidates']:
+    for candidate in candidates:
         if os.path.exists(candidate):
             selected_path = candidate
             break
@@ -96,7 +116,7 @@ def get_template_path(branch, title_length):
         else:
             raise FileNotFoundError(f"Template for branch '{branch}' ({category} title) not found.")
 
-    return selected_path, config['title_key']
+    return selected_path, title_key
 
 
 @app.route('/generate', methods=['POST'])
@@ -150,9 +170,10 @@ def generate():
         def render_practical_page(practical_idx, title):
             page_data = base_data.copy()
             page_data['practical_no'] = practical_numbers[practical_idx]
+            page_data['title'] = title
+            page_data['titleeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'] = title
             
-            tpl_path, title_key = get_template_path(branch, len(title))
-            page_data[title_key] = title
+            tpl_path, _ = get_template_path(branch, len(title))
                 
             if not os.path.exists(tpl_path):
                 raise FileNotFoundError(f"Template '{tpl_path}' is missing.")
