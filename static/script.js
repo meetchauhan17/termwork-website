@@ -72,10 +72,7 @@ document.addEventListener('DOMContentLoaded', () => {
         let html = '';
 
         if (start > 0 && end >= start && (end - start + 1) <= 50) {
-            html += `<h6 class="w-100 fw-bold mt-2 mb-3 text-secondary">
-                Practical Titles <small class="fw-normal">(Optional)</small>
-                <span class="char-counter ms-2">🟢 ≤43 short &nbsp; 🟡 44–115 medium &nbsp; 🔴 116+ long</span>
-            </h6>`;
+            html += `<h6 class="w-100 fw-bold mt-2 mb-3 text-secondary">Practical Titles <small class="fw-normal">(Optional)</small></h6>`;
             let idx = 0;
             for (let i = start; i <= end; i++) {
                 idx++;
