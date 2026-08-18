@@ -220,6 +220,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (result.success) {
                 // Show Success State
                 successState.classList.remove('d-none');
+                launchConfetti();
 
                 // Restart Lottie animation so it plays now (not while hidden)
                 const lottieEl = successState.querySelector('lottie-player');
@@ -262,7 +263,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         `;
-        
+        // Shake the alert for errors
+        if (type === 'danger') {
+            const alertEl = alertContainer.querySelector('.alert');
+            if (alertEl) { alertEl.classList.add('shake'); }
+        }
         // Auto dismiss after 5 seconds
         if(type === 'info' || type === 'success') {
             setTimeout(() => {
@@ -274,4 +279,110 @@ document.addEventListener('DOMContentLoaded', () => {
             }, 5000);
         }
     }
+
+    // =========================================
+    // ANIMATED WIDGETS
+    // =========================================
+
+    // --- Typewriter tagline ---
+    const typewriterEl = document.getElementById('typewriter-text');
+    const phrases = [
+        'Automate your multi-page termwork in seconds.',
+        'CSE & IT branch templates ready.',
+        'PDF & DOCX generated instantly.',
+        'Smart title-length detection built in.',
+    ];
+    let phraseIdx = 0, charIdx = 0, deleting = false;
+    function typeStep() {
+        const current = phrases[phraseIdx];
+        if (!deleting) {
+            typewriterEl.textContent = current.slice(0, ++charIdx);
+            if (charIdx === current.length) { deleting = true; setTimeout(typeStep, 1800); return; }
+        } else {
+            typewriterEl.textContent = current.slice(0, --charIdx);
+            if (charIdx === 0) { deleting = false; phraseIdx = (phraseIdx + 1) % phrases.length; }
+        }
+        setTimeout(typeStep, deleting ? 35 : 55);
+    }
+    typeStep();
+
+    // --- Ripple effect on all buttons ---
+    document.querySelectorAll('.btn').forEach(btn => {
+        btn.addEventListener('click', function(e) {
+            const ripple = document.createElement('span');
+            ripple.className = 'ripple';
+            const rect = this.getBoundingClientRect();
+            const size = Math.max(rect.width, rect.height);
+            ripple.style.cssText = `width:${size}px;height:${size}px;left:${e.clientX - rect.left - size/2}px;top:${e.clientY - rect.top - size/2}px`;
+            this.appendChild(ripple);
+            setTimeout(() => ripple.remove(), 600);
+        });
+    });
+
+    // --- Step indicator activation on scroll ---
+    const sectionStepMap = [
+        { selector: '[name="name"]',          stepId: 'step-1' },
+        { selector: '[name="subject"]',        stepId: 'step-2' },
+        { selector: '#practical-start',        stepId: 'step-3' },
+        { selector: '#btn-generate',           stepId: 'step-4' },
+    ];
+    function updateSteps() {
+        let lastFilled = -1;
+        sectionStepMap.forEach((item, i) => {
+            const el = document.querySelector(item.selector);
+            if (el && el.value && el.value.trim() !== '') lastFilled = i;
+        });
+        sectionStepMap.forEach((item, i) => {
+            const stepEl = document.getElementById(item.stepId);
+            const lineEl = stepEl ? stepEl.nextElementSibling : null;
+            if (!stepEl) return;
+            stepEl.classList.remove('active', 'done');
+            if (i < lastFilled)       stepEl.classList.add('done');
+            else if (i === lastFilled + 1 || (lastFilled === -1 && i === 0)) stepEl.classList.add('active');
+            if (lineEl && lineEl.classList.contains('step-line')) {
+                lineEl.classList.toggle('done-line', i <= lastFilled);
+            }
+        });
+    }
+    document.querySelectorAll('input, select').forEach(el => el.addEventListener('input', updateSteps));
+    updateSteps();
+
+    // --- IntersectionObserver scroll-reveal ---
+    const revealEls = document.querySelectorAll('.col-12, .col-md-6, .col-md-4, .col-md-12');
+    revealEls.forEach(el => el.classList.add('reveal-section'));
+    const revealObserver = new IntersectionObserver((entries) => {
+        entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); } });
+    }, { threshold: 0.12 });
+    revealEls.forEach(el => revealObserver.observe(el));
+
+    // --- Confetti burst on success ---
+    function launchConfetti() {
+        const container = document.getElementById('confetti-container');
+        if (!container) return;
+        container.innerHTML = '';
+        const colors = ['#10B981','#F472B6','#FBBF24','#34D399','#60A5FA','#A78BFA'];
+        for (let i = 0; i < 80; i++) {
+            const piece = document.createElement('div');
+            piece.className = 'confetti-piece';
+            const size = Math.random() * 10 + 6;
+            piece.style.cssText = `
+                left: ${Math.random() * 100}%;
+                width: ${size}px; height: ${size}px;
+                background: ${colors[Math.floor(Math.random() * colors.length)]};
+                animation-duration: ${Math.random() * 2 + 1.5}s;
+                animation-delay: ${Math.random() * 0.8}s;
+                border-radius: ${Math.random() > 0.5 ? '50%' : '2px'};
+            `;
+            container.appendChild(piece);
+        }
+        setTimeout(() => { container.innerHTML = ''; }, 4000);
+    }
+
+    // Patch success handler to also launch confetti
+    const origFetch = window.fetch;
+    // We'll hook into the result.success check via the existing handler already in place.
+    // Instead, we expose launchConfetti globally for the submit handler to call.
+    window.launchConfetti = launchConfetti;
+
 });
+

@@ -25,6 +25,16 @@
     <div class="geo-shape diamond"></div>
 </div>
 
+<!-- Animated Floating Orbs -->
+<div class="orb-container" aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+</div>
+
+<!-- Confetti container (filled by JS on success) -->
+<div id="confetti-container" aria-hidden="true"></div>
+
 <!-- Full-page Loading Overlay -->
 <div id="page-loading-overlay" class="d-none">
     <div class="loading-glass">
@@ -47,12 +57,37 @@
                     <h2 class="font-display mb-0 fs-4 fs-md-2">
                         <i class="fa-solid fa-file-pdf me-2 hover-bump" id="pdf-icon" style="color: var(--accent);"></i>Termwork Generator Pro
                     </h2>
-                    <p class="mb-0 mt-2 text-muted letter-spacing small">Automate your multi-page termwork in seconds</p>
+                    <p class="mb-0 mt-2 text-muted letter-spacing small">
+                        <span id="typewriter-text"></span><span class="typewriter-cursor">|</span>
+                    </p>
 
                     <!-- Branch Badges -->
                     <div class="branch-badges mt-3">
                         <span class="branch-badge badge-cse"><i class="fa-solid fa-microchip me-1"></i>CSE</span>
                         <span class="branch-badge badge-it"><i class="fa-solid fa-network-wired me-1"></i>IT</span>
+                    </div>
+
+                    <!-- Step Progress Indicator -->
+                    <div class="step-indicator mt-4">
+                        <div class="step active" id="step-1">
+                            <div class="step-dot"><i class="fa-solid fa-user"></i></div>
+                            <span class="step-label">Student</span>
+                        </div>
+                        <div class="step-line"></div>
+                        <div class="step" id="step-2">
+                            <div class="step-dot"><i class="fa-solid fa-book"></i></div>
+                            <span class="step-label">Academic</span>
+                        </div>
+                        <div class="step-line"></div>
+                        <div class="step" id="step-3">
+                            <div class="step-dot"><i class="fa-solid fa-flask"></i></div>
+                            <span class="step-label">Practicals</span>
+                        </div>
+                        <div class="step-line"></div>
+                        <div class="step" id="step-4">
+                            <div class="step-dot"><i class="fa-solid fa-rocket"></i></div>
+                            <span class="step-label">Generate</span>
+                        </div>
                     </div>
                 </div>
 
@@ -229,11 +264,13 @@
 
                     <!-- Success State -->
                     <div id="success-state" class="d-none text-center py-4 py-md-5">
-                        <div class="success-icon-wrap mb-3">
+                        <div class="success-icon-wrap mb-3 position-relative">
                             <lottie-player src="/static/success.json" background="transparent" speed="1"
                                 style="width: 180px; height: 180px; margin: 0 auto;" loop autoplay></lottie-player>
+                            <!-- Animated ring around success lottie -->
+                            <div class="success-ring"></div>
                         </div>
-                        <h3 class="fw-bold mb-2 fs-4 fs-md-3">Generation Complete! 🎉</h3>
+                        <h3 class="fw-bold mb-2 fs-4 fs-md-3 success-title">Generation Complete! 🎉</h3>
                         <p class="text-muted mb-4 small">Your termwork has been generated successfully.</p>
                         <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
                             <a href="#" id="download-pdf-btn" class="btn btn-danger btn-lg px-4">
