@@ -337,10 +337,10 @@ document.addEventListener('DOMContentLoaded', () => {
             const lineEl = stepEl ? stepEl.nextElementSibling : null;
             if (!stepEl) return;
             stepEl.classList.remove('active', 'done');
-            if (i < lastFilled)       stepEl.classList.add('done');
+            if (i <= lastFilled)      stepEl.classList.add('done');                          // ← was i < lastFilled
             else if (i === lastFilled + 1 || (lastFilled === -1 && i === 0)) stepEl.classList.add('active');
             if (lineEl && lineEl.classList.contains('step-line')) {
-                lineEl.classList.toggle('done-line', i <= lastFilled);
+                lineEl.classList.toggle('done-line', i < lastFilled);
             }
         });
     }

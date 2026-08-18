@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,308 +15,344 @@
     <!-- Lottie Player -->
     <script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 </head>
+
 <body>
 
-<!-- Neo-Memphis Floating Shapes -->
-<div class="geometric-bg-shapes">
-    <div class="geo-shape circle"></div>
-    <div class="geo-shape triangle"></div>
-    <div class="geo-shape square"></div>
-    <div class="geo-shape circle-sm"></div>
-    <div class="geo-shape diamond"></div>
-</div>
+    <!-- Neo-Memphis Floating Shapes -->
+    <div class="geometric-bg-shapes">
+        <div class="geo-shape circle"></div>
+        <div class="geo-shape triangle"></div>
+        <div class="geo-shape square"></div>
+        <div class="geo-shape circle-sm"></div>
+        <div class="geo-shape diamond"></div>
+    </div>
 
-<!-- Animated Floating Orbs -->
-<div class="orb-container" aria-hidden="true">
-    <div class="orb orb-1"></div>
-    <div class="orb orb-2"></div>
-    <div class="orb orb-3"></div>
-</div>
+    <!-- Animated Floating Orbs -->
+    <div class="orb-container" aria-hidden="true">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
 
-<!-- Confetti container (filled by JS on success) -->
-<div id="confetti-container" aria-hidden="true"></div>
+    <!-- Confetti container (filled by JS on success) -->
+    <div id="confetti-container" aria-hidden="true"></div>
 
-<!-- Full-page Loading Overlay -->
-<div id="page-loading-overlay" class="d-none">
-    <div class="loading-glass">
-        <lottie-player src="/static/loader.json" background="transparent" speed="1"
-            style="width: 160px; height: 160px; margin: 0 auto;" loop autoplay></lottie-player>
-        <h4 class="mt-3 fw-bold loading-title">Generating your document…</h4>
-        <p class="text-muted mt-1 small">This may take a few seconds.</p>
-        <div class="loading-bar-track mt-4">
-            <div class="loading-bar-fill" id="loading-bar"></div>
+    <!-- Full-page Loading Overlay -->
+    <div id="page-loading-overlay" class="d-none">
+        <div class="loading-glass">
+            <lottie-player src="/static/loader.json" background="transparent" speed="1"
+                style="width: 160px; height: 160px; margin: 0 auto;" loop autoplay></lottie-player>
+            <h4 class="mt-3 fw-bold loading-title">Generating your document…</h4>
+            <p class="text-muted mt-1 small">This may take a few seconds.</p>
+            <div class="loading-bar-track mt-4">
+                <div class="loading-bar-fill" id="loading-bar"></div>
+            </div>
         </div>
     </div>
-</div>
 
-<div class="container py-5 position-relative z-index-1">
-    <div class="row justify-content-center">
-        <div class="col-lg-10">
-            <div class="card p-3 p-md-4">
-                <div class="card-header text-center position-relative">
-                    <div class="header-badge">PRO</div>
-                    <h2 class="font-display mb-0 fs-4 fs-md-2">
-                        <i class="fa-solid fa-file-pdf me-2 hover-bump" id="pdf-icon" style="color: var(--accent);"></i>Termwork Generator Pro
-                    </h2>
-                    <p class="mb-0 mt-2 text-muted letter-spacing small">
-                        <span id="typewriter-text"></span><span class="typewriter-cursor">|</span>
-                    </p>
+    <div class="container py-5 position-relative z-index-1">
+        <div class="row justify-content-center">
+            <div class="col-lg-10">
+                <div class="card p-3 p-md-4">
+                    <div class="card-header text-center position-relative">
+                        <div class="header-badge">PRO</div>
+                        <h2 class="font-display mb-0 fs-4 fs-md-2">
+                            <i class="fa-solid fa-file-pdf me-2 hover-bump" id="pdf-icon"
+                                style="color: var(--accent);"></i>Termwork Generator Pro
+                        </h2>
+                        <p class="mb-0 mt-2 text-muted letter-spacing small">
+                            <span id="typewriter-text"></span><span class="typewriter-cursor">|</span>
+                        </p>
 
-                    <!-- Branch Badges -->
-                    <div class="branch-badges mt-3">
-                        <span class="branch-badge badge-cse"><i class="fa-solid fa-microchip me-1"></i>CSE</span>
-                        <span class="branch-badge badge-it"><i class="fa-solid fa-network-wired me-1"></i>IT</span>
-                    </div>
-
-                    <!-- Step Progress Indicator -->
-                    <div class="step-indicator mt-4">
-                        <div class="step active" id="step-1">
-                            <div class="step-dot"><i class="fa-solid fa-user"></i></div>
-                            <span class="step-label">Student</span>
-                        </div>
-                        <div class="step-line"></div>
-                        <div class="step" id="step-2">
-                            <div class="step-dot"><i class="fa-solid fa-book"></i></div>
-                            <span class="step-label">Academic</span>
-                        </div>
-                        <div class="step-line"></div>
-                        <div class="step" id="step-3">
-                            <div class="step-dot"><i class="fa-solid fa-flask"></i></div>
-                            <span class="step-label">Practicals</span>
-                        </div>
-                        <div class="step-line"></div>
-                        <div class="step" id="step-4">
-                            <div class="step-dot"><i class="fa-solid fa-rocket"></i></div>
-                            <span class="step-label">Generate</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card-body p-4 p-md-5">
-                    <!-- Status Messages -->
-                    <div id="alert-container"></div>
-
-                    <form id="termwork-form" novalidate>
-
-                        <div class="row g-4 mb-4">
-                            <!-- Student Details Section -->
-                            <div class="col-12">
-                                <h5 class="section-title"><img src="/static/man.gif" alt="" class="section-gif me-2">Student Details</h5>
-                                <hr>
-                            </div>
-
-                            <div class="col-md-6">
-                                <label class="form-label fw-semibold">Name of Student <span class="text-danger">*</span></label>
-                                <div class="input-icon-wrap">
-                                    <i class="fa-solid fa-user input-icon"></i>
-                                    <input type="text" class="form-control form-control-lg has-icon" name="name" required placeholder="e.g. John Doe">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label fw-semibold">PEN (Enrollment No) <span class="text-danger">*</span></label>
-                                <div class="input-icon-wrap">
-                                    <i class="fa-solid fa-id-card input-icon"></i>
-                                    <input type="text" class="form-control form-control-lg has-icon" name="pen" required minlength="12" maxlength="12" pattern="\d{12}" title="PEN must be exactly 12 digits" placeholder="e.g. 123456789012">
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label fw-semibold">Class</label>
-                                <div class="d-flex gap-2 align-items-start">
-                                    <!-- Branch -->
-                                    <div class="flex-fill">
-                                        <select class="form-control class-part" id="class-branch">
-                                            <option value="" disabled selected>Branch</option>
-                                            <option value="CSE">CSE</option>
-                                            <option value="IT">IT</option>
-                                            <option value="custom">Custom</option>
-                                        </select>
-                                        <input type="text" class="form-control mt-1 d-none" id="class-branch-custom" placeholder="Type...">
-                                    </div>
-                                    <!-- Year -->
-                                    <div class="flex-fill">
-                                        <select class="form-control class-part" id="class-year">
-                                            <option value="" disabled selected>Year</option>
-                                            <option value="21">21</option>
-                                            <option value="22">22</option>
-                                            <option value="23">23</option>
-                                            <option value="24">24</option>
-                                            <option value="25">25</option>
-                                            <option value="26">26</option>
-                                            <option value="27">27</option>
-                                            <option value="28">28</option>
-                                            <option value="29">29</option>
-                                            <option value="30">30</option>
-                                            <option value="31">31</option>
-                                            <option value="32">32</option>
-                                            <option value="33">33</option>
-                                            <option value="34">34</option>
-                                            <option value="35">35</option>
-                                            <option value="36">36</option>
-                                            <option value="37">37</option>
-                                            <option value="38">38</option>
-                                            <option value="39">39</option>
-                                            <option value="40">40</option>
-                                            <option value="custom">Custom</option>
-                                        </select>
-                                        <input type="text" class="form-control mt-1 d-none" id="class-year-custom" placeholder="Type...">
-                                    </div>
-                                    <!-- Section -->
-                                    <div class="flex-fill">
-                                        <select class="form-control class-part" id="class-section">
-                                            <option value="" disabled selected>Sec</option>
-                                            <option value="A">A</option>
-                                            <option value="B">B</option>
-                                            <option value="C">C</option>
-                                            <option value="D">D</option>
-                                            <option value="E">E</option>
-                                            <option value="F">F</option>
-                                            <option value="custom">Custom</option>
-                                        </select>
-                                        <input type="text" class="form-control mt-1 d-none" id="class-section-custom" placeholder="Type...">
-                                    </div>
-                                </div>
-                                <!-- Hidden field that stores the combined value -->
-                                <input type="hidden" name="class" id="class-combined">
-                                <input type="hidden" name="branch" id="branch-combined">
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label fw-semibold">Batch</label>
-                                <div class="input-icon-wrap">
-                                    <i class="fa-solid fa-layer-group input-icon"></i>
-                                    <input type="text" class="form-control has-icon" name="batch" placeholder="e.g. A1">
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label fw-semibold">Semester</label>
-                                <div class="input-icon-wrap">
-                                    <i class="fa-solid fa-calendar input-icon"></i>
-                                    <input type="text" class="form-control has-icon" name="semester" placeholder="e.g. 6th">
-                                </div>
-                            </div>
-
-                            <!-- Subject & Academic Details -->
-                            <div class="col-12 mt-5">
-                                <h5 class="section-title"><img src="/static/document.gif" alt="" class="section-gif me-2">Academic Details</h5>
-                                <hr>
-                            </div>
-
-                            <div class="col-md-6">
-                                <label class="form-label fw-semibold">Subject <span class="text-danger">*</span></label>
-                                <div class="input-icon-wrap">
-                                    <i class="fa-solid fa-book input-icon"></i>
-                                    <input type="text" class="form-control has-icon" name="subject" required placeholder="e.g. Cloud Computing">
-                                </div>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="form-label fw-semibold">Term</label>
-                                <div class="input-icon-wrap">
-                                    <i class="fa-solid fa-tag input-icon"></i>
-                                    <input type="text" class="form-control has-icon" name="term" placeholder="e.g. Even 2024">
-                                </div>
-                            </div>
-                            <div class="col-md-12">
-                                <label class="form-label fw-semibold">Checked By (Faculty Name)</label>
-                                <div class="input-icon-wrap">
-                                    <i class="fa-solid fa-chalkboard-teacher input-icon"></i>
-                                    <input type="text" class="form-control has-icon" name="checked_by" placeholder="e.g. Prof. Smith">
-                                </div>
-                            </div>
-
-                            <!-- Practical Settings -->
-                            <div class="col-12 mt-5">
-                                <h5 class="section-title"><img src="/static/computer.gif" alt="" class="section-gif me-2">Practicals Configuration</h5>
-                                <hr>
-                            </div>
-
-                            <div class="col-md-4">
-                                <label class="form-label fw-semibold">Start Practical No <span class="text-danger">*</span></label>
-                                <div class="input-icon-wrap">
-                                    <i class="fa-solid fa-play input-icon"></i>
-                                    <input type="number" class="form-control form-control-lg has-icon" id="practical-start" name="practical_start" min="1" max="50" required placeholder="e.g. 1">
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <label class="form-label fw-semibold">End Practical No <span class="text-danger">*</span></label>
-                                <div class="input-icon-wrap">
-                                    <i class="fa-solid fa-stop input-icon"></i>
-                                    <input type="number" class="form-control form-control-lg has-icon" id="practical-end" name="practical_end" min="1" max="50" required placeholder="e.g. 6">
-                                </div>
-                            </div>
-
-                            <div class="col-12">
-                                <!-- Dynamic Fields Container -->
-                                <div id="dynamic-titles-container" class="mt-3 row g-3"></div>
-                            </div>
-
+                        <!-- Branch Badges -->
+                        <div class="branch-badges mt-3">
+                            <span class="branch-badge badge-cse"><i class="fa-solid fa-microchip me-1"></i>CSE</span>
+                            <span class="branch-badge badge-it"><i class="fa-solid fa-network-wired me-1"></i>IT</span>
                         </div>
 
-                        <!-- Action Buttons -->
-                        <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-5 pt-3 border-top border-dashed">
-                            <button type="button" class="btn btn-outline-secondary btn-lg px-4 d-inline-flex align-items-center" id="btn-load-data">
-                                <lottie-player src="/static/refresh.json" background="transparent" speed="1" style="width: 28px; height: 28px; display: inline-block; vertical-align: middle;" loop autoplay></lottie-player>
-                                <span class="ms-2">Load Last Data</span>
-                            </button>
-                            <button type="submit" class="btn btn-primary btn-lg px-5 text-white generate-btn" id="btn-generate">
-                                <lottie-player src="/static/settings.json" background="transparent" speed="1" style="width: 32px; height: 32px; display: inline-block; vertical-align: middle;" loop autoplay></lottie-player>
-                                <span class="ms-1 fw-bold fs-5">Generate Termwork</span>
-                            </button>
-                        </div>
-                    </form>
-
-                    <!-- Success State -->
-                    <div id="success-state" class="d-none text-center py-4 py-md-5">
-                        <div class="success-icon-wrap mb-3 position-relative">
-                            <lottie-player src="/static/success.json" background="transparent" speed="1"
-                                style="width: 180px; height: 180px; margin: 0 auto;" loop autoplay></lottie-player>
-                            <!-- Animated ring around success lottie -->
-                            <div class="success-ring"></div>
-                        </div>
-                        <h3 class="fw-bold mb-2 fs-4 fs-md-3 success-title">Generation Complete! 🎉</h3>
-                        <p class="text-muted mb-4 small">Your termwork has been generated successfully.</p>
-                        <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
-                            <a href="#" id="download-pdf-btn" class="btn btn-danger btn-lg px-4">
-                                <i class="fa-solid fa-file-pdf me-2"></i>Download PDF
-                            </a>
-                            <a href="#" id="download-docx-btn" class="btn btn-primary btn-lg px-4">
-                                <i class="fa-solid fa-file-word me-2"></i>Download DOCX
-                            </a>
-                        </div>
-                        <div class="mt-4">
-                            <button class="btn btn-link text-decoration-none" id="btn-create-another">
-                                <i class="fa-solid fa-arrow-rotate-left me-1"></i>Create Another
-                            </button>
+                        <!-- Step Progress Indicator -->
+                        <div class="step-indicator mt-4">
+                            <div class="step active" id="step-1">
+                                <div class="step-dot"><i class="fa-solid fa-user"></i></div>
+                                <span class="step-label">Student</span>
+                            </div>
+                            <div class="step-line"></div>
+                            <div class="step" id="step-2">
+                                <div class="step-dot"><i class="fa-solid fa-book"></i></div>
+                                <span class="step-label">Academic</span>
+                            </div>
+                            <div class="step-line"></div>
+                            <div class="step" id="step-3">
+                                <div class="step-dot"><i class="fa-solid fa-flask"></i></div>
+                                <span class="step-label">Practicals</span>
+                            </div>
+                            <div class="step-line"></div>
+                            <div class="step" id="step-4">
+                                <div class="step-dot"><i class="fa-solid fa-rocket"></i></div>
+                                <span class="step-label">Generate</span>
+                            </div>
                         </div>
                     </div>
 
+                    <div class="card-body p-4 p-md-5">
+                        <!-- Status Messages -->
+                        <div id="alert-container"></div>
+
+                        <form id="termwork-form" novalidate>
+
+                            <div class="row g-4 mb-4">
+                                <!-- Student Details Section -->
+                                <div class="col-12">
+                                    <h5 class="section-title"><img src="/static/man.gif" alt=""
+                                            class="section-gif me-2">Student Details</h5>
+                                    <hr>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Name of Student <span
+                                            class="text-danger">*</span></label>
+                                    <div class="input-icon-wrap">
+                                        <i class="fa-solid fa-user input-icon"></i>
+                                        <input type="text" class="form-control form-control-lg has-icon" name="name"
+                                            required placeholder="e.g. John Doe">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">PEN (Enrollment No) <span
+                                            class="text-danger">*</span></label>
+                                    <div class="input-icon-wrap">
+                                        <i class="fa-solid fa-id-card input-icon"></i>
+                                        <input type="text" class="form-control form-control-lg has-icon" name="pen"
+                                            required minlength="12" maxlength="12" pattern="\d{12}"
+                                            title="PEN must be exactly 12 digits" placeholder="e.g. 123456789012">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold">Class</label>
+                                    <div class="d-flex gap-2 align-items-start">
+                                        <!-- Branch -->
+                                        <div class="flex-fill">
+                                            <select class="form-control class-part" id="class-branch">
+                                                <option value="" disabled selected>Branch</option>
+                                                <option value="CSE">CSE</option>
+                                                <option value="IT">IT</option>
+                                                <option value="custom">Custom</option>
+                                            </select>
+                                            <input type="text" class="form-control mt-1 d-none" id="class-branch-custom"
+                                                placeholder="Type...">
+                                        </div>
+                                        <!-- Year -->
+                                        <div class="flex-fill">
+                                            <select class="form-control class-part" id="class-year">
+                                                <option value="" disabled selected>Year</option>
+                                                <option value="21">21</option>
+                                                <option value="22">22</option>
+                                                <option value="23">23</option>
+                                                <option value="24">24</option>
+                                                <option value="25">25</option>
+                                                <option value="26">26</option>
+                                                <option value="27">27</option>
+                                                <option value="28">28</option>
+                                                <option value="29">29</option>
+                                                <option value="30">30</option>
+                                                <option value="31">31</option>
+                                                <option value="32">32</option>
+                                                <option value="33">33</option>
+                                                <option value="34">34</option>
+                                                <option value="35">35</option>
+                                                <option value="36">36</option>
+                                                <option value="37">37</option>
+                                                <option value="38">38</option>
+                                                <option value="39">39</option>
+                                                <option value="40">40</option>
+                                                <option value="custom">Custom</option>
+                                            </select>
+                                            <input type="text" class="form-control mt-1 d-none" id="class-year-custom"
+                                                placeholder="Type...">
+                                        </div>
+                                        <!-- Section -->
+                                        <div class="flex-fill">
+                                            <select class="form-control class-part" id="class-section">
+                                                <option value="" disabled selected>Sec</option>
+                                                <option value="A">A</option>
+                                                <option value="B">B</option>
+                                                <option value="C">C</option>
+                                                <option value="D">D</option>
+                                                <option value="E">E</option>
+                                                <option value="F">F</option>
+                                                <option value="custom">Custom</option>
+                                            </select>
+                                            <input type="text" class="form-control mt-1 d-none"
+                                                id="class-section-custom" placeholder="Type...">
+                                        </div>
+                                    </div>
+                                    <!-- Hidden field that stores the combined value -->
+                                    <input type="hidden" name="class" id="class-combined">
+                                    <input type="hidden" name="branch" id="branch-combined">
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold">Batch</label>
+                                    <div class="input-icon-wrap">
+                                        <i class="fa-solid fa-layer-group input-icon"></i>
+                                        <input type="text" class="form-control has-icon" name="batch"
+                                            placeholder="e.g. A1">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold">Semester</label>
+                                    <div class="input-icon-wrap">
+                                        <i class="fa-solid fa-calendar input-icon"></i>
+                                        <input type="text" class="form-control has-icon" name="semester"
+                                            placeholder="e.g. 6th">
+                                    </div>
+                                </div>
+
+                                <!-- Subject & Academic Details -->
+                                <div class="col-12 mt-5">
+                                    <h5 class="section-title"><img src="/static/document.gif" alt=""
+                                            class="section-gif me-2">Academic Details</h5>
+                                    <hr>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Subject <span
+                                            class="text-danger">*</span></label>
+                                    <div class="input-icon-wrap">
+                                        <i class="fa-solid fa-book input-icon"></i>
+                                        <input type="text" class="form-control has-icon" name="subject" required
+                                            placeholder="e.g. Cloud Computing">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Term</label>
+                                    <div class="input-icon-wrap">
+                                        <i class="fa-solid fa-tag input-icon"></i>
+                                        <input type="text" class="form-control has-icon" name="term"
+                                            placeholder="e.g. Even 2024">
+                                    </div>
+                                </div>
+                                <div class="col-md-12">
+                                    <label class="form-label fw-semibold">Checked By (Faculty Name)</label>
+                                    <div class="input-icon-wrap">
+                                        <i class="fa-solid fa-chalkboard-teacher input-icon"></i>
+                                        <input type="text" class="form-control has-icon" name="checked_by"
+                                            placeholder="e.g. Prof. Smith">
+                                    </div>
+                                </div>
+
+                                <!-- Practical Settings -->
+                                <div class="col-12 mt-5">
+                                    <h5 class="section-title"><img src="/static/computer.gif" alt=""
+                                            class="section-gif me-2">Practicals Configuration</h5>
+                                    <hr>
+                                </div>
+
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold">Start Practical No <span
+                                            class="text-danger">*</span></label>
+                                    <div class="input-icon-wrap">
+                                        <i class="fa-solid fa-play input-icon"></i>
+                                        <input type="number" class="form-control form-control-lg has-icon"
+                                            id="practical-start" name="practical_start" min="1" max="50" required
+                                            placeholder="e.g. 1">
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label class="form-label fw-semibold">End Practical No <span
+                                            class="text-danger">*</span></label>
+                                    <div class="input-icon-wrap">
+                                        <i class="fa-solid fa-stop input-icon"></i>
+                                        <input type="number" class="form-control form-control-lg has-icon"
+                                            id="practical-end" name="practical_end" min="1" max="50" required
+                                            placeholder="e.g. 6">
+                                    </div>
+                                </div>
+
+                                <div class="col-12">
+                                    <!-- Dynamic Fields Container -->
+                                    <div id="dynamic-titles-container" class="mt-3 row g-3"></div>
+                                </div>
+
+                            </div>
+
+                            <!-- Action Buttons -->
+                            <div
+                                class="d-grid gap-2 d-md-flex justify-content-md-end mt-5 pt-3 border-top border-dashed">
+                                <button type="button"
+                                    class="btn btn-outline-secondary btn-lg px-4 d-inline-flex align-items-center"
+                                    id="btn-load-data">
+                                    <lottie-player src="/static/refresh.json" background="transparent" speed="1"
+                                        style="width: 28px; height: 28px; display: inline-block; vertical-align: middle;"
+                                        loop autoplay></lottie-player>
+                                    <span class="ms-2">Load Last Data</span>
+                                </button>
+                                <button type="submit" class="btn btn-primary btn-lg px-5 text-white generate-btn"
+                                    id="btn-generate">
+                                    <lottie-player src="/static/settings.json" background="transparent" speed="1"
+                                        style="width: 32px; height: 32px; display: inline-block; vertical-align: middle;"
+                                        loop autoplay></lottie-player>
+                                    <span class="ms-1 fw-bold fs-5">Generate Termwork</span>
+                                </button>
+                            </div>
+                        </form>
+
+                        <!-- Success State -->
+                        <div id="success-state" class="d-none text-center py-4 py-md-5">
+                            <div class="success-icon-wrap mb-3 position-relative">
+                                <lottie-player src="/static/success.json" background="transparent" speed="1"
+                                    style="width: 180px; height: 180px; margin: 0 auto;" loop autoplay></lottie-player>
+                                <!-- Animated ring around success lottie -->
+                                <div class="success-ring"></div>
+                            </div>
+                            <h3 class="fw-bold mb-2 fs-4 fs-md-3 success-title">Generation Complete! </h3>
+                            <p class="text-muted mb-4 small">Your termwork has been generated successfully.</p>
+                            <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
+                                <a href="#" id="download-pdf-btn" class="btn btn-danger btn-lg px-4">
+                                    <i class="fa-solid fa-file-pdf me-2"></i>Download PDF
+                                </a>
+                                <a href="#" id="download-docx-btn" class="btn btn-primary btn-lg px-4">
+                                    <i class="fa-solid fa-file-word me-2"></i>Download DOCX
+                                </a>
+                            </div>
+                            <div class="mt-4">
+                                <button class="btn btn-link text-decoration-none" id="btn-create-another">
+                                    <i class="fa-solid fa-arrow-rotate-left me-1"></i>Create Another
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- Marquee Strip -->
-<div class="marquee-container">
-    <div class="marquee-content">
-        ✦ TERMWORK GENERATOR PRO &nbsp;&nbsp;&nbsp; ✦ CSE &nbsp;&nbsp;&nbsp; ✦ IT &nbsp;&nbsp;&nbsp;
-        ✦ AUTO GENERATE &nbsp;&nbsp;&nbsp; ✦ SAVE TIME &nbsp;&nbsp;&nbsp;
-        ✦ TERMWORK GENERATOR PRO &nbsp;&nbsp;&nbsp; ✦ CSE &nbsp;&nbsp;&nbsp; ✦ IT &nbsp;&nbsp;&nbsp;
-        ✦ AUTO GENERATE &nbsp;&nbsp;&nbsp; ✦ SAVE TIME &nbsp;&nbsp;&nbsp;
+    <!-- Marquee Strip -->
+    <div class="marquee-container">
+        <div class="marquee-content">
+            ✦ TERMWORK GENERATOR PRO &nbsp;&nbsp;&nbsp; ✦ CSE &nbsp;&nbsp;&nbsp; ✦ IT &nbsp;&nbsp;&nbsp;
+            ✦ AUTO GENERATE &nbsp;&nbsp;&nbsp; ✦ SAVE TIME &nbsp;&nbsp;&nbsp;
+            ✦ TERMWORK GENERATOR PRO &nbsp;&nbsp;&nbsp; ✦ CSE &nbsp;&nbsp;&nbsp; ✦ IT &nbsp;&nbsp;&nbsp;
+            ✦ AUTO GENERATE &nbsp;&nbsp;&nbsp; ✦ SAVE TIME &nbsp;&nbsp;&nbsp;
+        </div>
     </div>
-</div>
 
-<!-- Footer -->
-<footer class="text-center mt-4 mb-16 text-muted position-relative z-index-1">
-    <small>
-        &copy; 2026 Crafted with <i class="fa-solid fa-heart text-danger mx-1"></i> by <strong class="text-primary" style="color: var(--accent) !important;">Meet Chauhan</strong>.<br>
-        <a href="mailto:meetc8030@gmail.com" class="text-muted fw-semibold mt-1 d-inline-block hover-bump" style="text-decoration: none;">
-            <i class="fa-solid fa-bug me-1"></i> Experiencing an issue? Report a bug or share your feedback.
-        </a>
-    </small>
-</footer>
+    <!-- Footer -->
+    <footer class="text-center mt-4 mb-16 text-muted position-relative z-index-1">
+        <small>
+            &copy; 2026 Crafted with <i class="fa-solid fa-heart text-danger mx-1"></i> by <strong class="text-primary"
+                style="color: var(--accent) !important;">Meet Chauhan</strong>.<br>
+            <a href="mailto:meetc8030@gmail.com" class="text-muted fw-semibold mt-1 d-inline-block hover-bump"
+                style="text-decoration: none;">
+                <i class="fa-solid fa-bug me-1"></i> Experiencing an issue? Report a bug or share your feedback.
+            </a>
+        </small>
+    </footer>
 
 
-<!-- Bootstrap & Custom JS -->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
-<script src="{{ url_for('static', filename='script.js') }}"></script>
+    <!-- Bootstrap & Custom JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
+
 </html>
