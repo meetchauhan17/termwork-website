@@ -1,4 +1,5 @@
 import os
+import re
 import copy
 import sys
 import subprocess
@@ -188,8 +189,17 @@ def generate():
         except FileNotFoundError as fnf_err:
             return jsonify({'success': False, 'message': str(fnf_err)})
 
-        output_docx = 'outputs/Termwork.docx'
-        output_pdf = 'outputs/Termwork.pdf'
+        # --- Build pretty filename: last-3-digits-of-PEN + subject ---
+        pen     = form.get('pen', '').strip()
+        subject = form.get('subject', '').strip()
+        pen_suffix  = pen[-3:] if len(pen) >= 3 else pen.zfill(3)
+        # Sanitize subject: keep letters, digits, spaces, hyphens
+        safe_subject = re.sub(r'[^\w\s\-]', '', subject).strip()
+        safe_subject = re.sub(r'\s+', ' ', safe_subject)  # collapse whitespace
+        base_name = f"{pen_suffix}_{safe_subject}" if safe_subject else f"{pen_suffix}_Termwork"
+
+        output_docx = f'outputs/{base_name}.docx'
+        output_pdf  = f'outputs/{base_name}.pdf'
 
         final_doc.save(output_docx)
 
@@ -208,23 +218,25 @@ def generate():
         return jsonify({
             'success': True,
             'message': 'Termwork generated successfully!',
-            'download_pdf': '/download/pdf',
-            'download_docx': '/download/docx'
+            'download_pdf':  f'/download/pdf/{base_name}',
+            'download_docx': f'/download/docx/{base_name}'
         })
 
     except Exception as e:
         return jsonify({'success': False, 'message': f'Error occurred: {str(e)}'})
 
 
-@app.route('/download/<file_type>')
-def download(file_type):
+@app.route('/download/<file_type>/<path:base_name>')
+def download(file_type, base_name):
     if file_type == 'pdf':
-        path = 'outputs/Termwork.pdf'
+        path        = f'outputs/{base_name}.pdf'
+        dl_name     = f'{base_name}.pdf'
     else:
-        path = 'outputs/Termwork.docx'
+        path        = f'outputs/{base_name}.docx'
+        dl_name     = f'{base_name}.docx'
 
     if os.path.exists(path):
-        return send_file(path, as_attachment=True)
+        return send_file(path, as_attachment=True, download_name=dl_name)
     return "File not found", 404
 
 
