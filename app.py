@@ -152,39 +152,52 @@ def generate():
             first_tpl.save(temp_first)
             final_doc = Document(temp_first)
             
-            # Append subsequent pages — each on a guaranteed new page
-            for idx in range(1, count):
-                page_tpl = render_practical_page(idx, titles[idx])
+            WORD_NS = 'http://schemas.openxmlformats.org/wordprocessingml/2006/main'
 
-                # Find section properties in final_doc to insert before it
+            # Append subsequent pages using proper Word section breaks.
+            # Embedding sectPr inside the last paragraph's <w:pPr> as
+            # <w:type w:val="nextPage"/> is the correct way Word forces a new
+            # page without inserting an extra blank page.
+            for idx in range(1, count):
+                page_tpl  = render_practical_page(idx, titles[idx])
+                final_body = final_doc.element.body
+
+                # --- Pull the body-level sectPr out of final_doc ---
                 final_sect_pr = None
-                for child in final_doc.element.body:
+                for child in list(final_body):
                     if child.tag.endswith('sectPr'):
                         final_sect_pr = child
+                        final_body.remove(child)
                         break
 
-                # --- Hard page break paragraph ---
-                # Guarantees this practical always starts on a fresh page,
-                # no matter what the template's own sectPr says.
-                WORD_NS = 'http://schemas.openxmlformats.org/wordprocessingml/2006/main'
-                pb_para  = etree.Element(f'{{{WORD_NS}}}p')
-                pb_run   = etree.SubElement(pb_para, f'{{{WORD_NS}}}r')
-                pb_break = etree.SubElement(pb_run,  f'{{{WORD_NS}}}br')
-                pb_break.set(f'{{{WORD_NS}}}type', 'page')
+                # --- Embed it as a "next page" section break in a separator paragraph ---
+                # This tells Word: end the current section here and start the next on a new page.
+                sep_para = etree.Element(f'{{{WORD_NS}}}p')
+                sep_pPr  = etree.SubElement(sep_para, f'{{{WORD_NS}}}pPr')
 
                 if final_sect_pr is not None:
-                    final_sect_pr.addprevious(pb_para)
-                else:
-                    final_doc.element.body.append(pb_para)
+                    sect_clone = copy.deepcopy(final_sect_pr)
+                    # Remove any existing <w:type> and replace with nextPage
+                    for t in sect_clone.findall(f'{{{WORD_NS}}}type'):
+                        sect_clone.remove(t)
+                    type_el = etree.Element(f'{{{WORD_NS}}}type')
+                    type_el.set(f'{{{WORD_NS}}}val', 'nextPage')
+                    sect_clone.insert(0, type_el)
+                    sep_pPr.append(sect_clone)
 
-                # Append all body elements from rendered template
+                final_body.append(sep_para)
+
+                # --- Append new template's body content ---
+                new_sect_pr = None
                 for element in page_tpl.element.body:
                     if element.tag.endswith('sectPr'):
-                        continue
-                    if final_sect_pr is not None:
-                        final_sect_pr.addprevious(copy.deepcopy(element))
+                        new_sect_pr = copy.deepcopy(element)
                     else:
-                        final_doc.element.body.append(copy.deepcopy(element))
+                        final_body.append(copy.deepcopy(element))
+
+                # Restore a body-level sectPr (use new template's or clone the old one)
+                final_body.append(new_sect_pr if new_sect_pr is not None
+                                  else copy.deepcopy(final_sect_pr))
                         
         except FileNotFoundError as fnf_err:
             return jsonify({'success': False, 'message': str(fnf_err)})
