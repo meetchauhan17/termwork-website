@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const alertContainer = document.getElementById('alert-container');
     const loadDataBtn = document.getElementById('btn-load-data');
     const form = document.getElementById('termwork-form');
-    const loadingOverlay = document.getElementById('loading-overlay');
+    const loadingOverlay = document.getElementById('page-loading-overlay');
     const successState = document.getElementById('success-state');
     const createAnotherBtn = document.getElementById('btn-create-another');
     
@@ -57,29 +57,59 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
     
+    // Title length zone classifier
+    function titleZone(len) {
+        if (len === 0)   return '';
+        if (len <= 43)   return 'short';
+        if (len <= 115)  return 'medium';
+        return 'long';
+    }
+
     // Dynamically generate practical titles based on start/end range
     function generateTitleFields() {
         const start = parseInt(practicalStartInput.value) || 0;
-        const end = parseInt(practicalEndInput.value) || 0;
+        const end   = parseInt(practicalEndInput.value)   || 0;
         let html = '';
-        
+
         if (start > 0 && end >= start && (end - start + 1) <= 50) {
-            html += '<h6 class="w-100 fw-bold mt-2 mb-3 text-secondary">Practical Titles (Optional)</h6>';
+            html += `<h6 class="w-100 fw-bold mt-2 mb-3 text-secondary">
+                Practical Titles <small class="fw-normal">(Optional)</small>
+                <span class="char-counter ms-2">🟢 ≤43 short &nbsp; 🟡 44–115 medium &nbsp; 🔴 116+ long</span>
+            </h6>`;
             let idx = 0;
             for (let i = start; i <= end; i++) {
                 idx++;
                 let delay = Math.min(idx * 0.05, 0.5);
                 html += `
                 <div class="col-md-6 mb-3 dynamic-field" style="animation-delay: ${delay}s">
-                    <label class="form-label text-muted small fw-bold">Experiment ${i} Title</label>
-                    <input type="text" class="form-control" name="title_${i}" placeholder="Enter title for Exp ${i}">
-                </div>
-                `;
+                    <label class="form-label text-muted small fw-bold d-flex align-items-center justify-content-between">
+                        <span>Experiment ${i} Title</span>
+                        <span class="char-counter" id="counter-${i}">0</span>
+                    </label>
+                    <input type="text" class="form-control title-input" name="title_${i}"
+                           placeholder="Enter title for Exp ${i}" data-exp="${i}">
+                </div>`;
             }
         } else if (end > 0 && start > 0 && (end - start + 1) > 50) {
             html = '<div class="alert alert-warning w-100"><i class="fa-solid fa-triangle-exclamation me-2"></i> Maximum 50 practicals allowed at once.</div>';
         }
         titlesContainer.innerHTML = html;
+
+        // Attach live char counter + color-coding
+        titlesContainer.querySelectorAll('.title-input').forEach(input => {
+            const exp = input.dataset.exp;
+            const counter = document.getElementById(`counter-${exp}`);
+            const update = () => {
+                const len  = input.value.length;
+                const zone = titleZone(len);
+                if (counter) {
+                    counter.textContent = len;
+                    counter.className = 'char-counter' + (zone ? ` zone-${zone}` : '');
+                }
+                input.className = 'form-control title-input' + (zone ? ` title-${zone}` : '');
+            };
+            input.addEventListener('input', update);
+        });
     }
 
     practicalStartInput.addEventListener('input', generateTitleFields);
@@ -174,6 +204,9 @@ document.addEventListener('DOMContentLoaded', () => {
         loadingOverlay.classList.remove('d-none');
         successState.classList.add('d-none');
         alertContainer.innerHTML = '';
+        // Reset loading bar animation
+        const lb = document.getElementById('loading-bar');
+        if (lb) { lb.style.animation = 'none'; lb.offsetHeight; lb.style.animation = ''; }
 
         try {
             const formData = new FormData(form);
