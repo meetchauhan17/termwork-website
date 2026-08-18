@@ -151,10 +151,10 @@ def generate():
             first_tpl.save(temp_first)
             final_doc = Document(temp_first)
             
-            # Append subsequent pages
+            # Append subsequent pages — each on a guaranteed new page
             for idx in range(1, count):
                 page_tpl = render_practical_page(idx, titles[idx])
-                
+
                 # Find section properties in final_doc to insert before it
                 final_sect_pr = None
                 for child in final_doc.element.body:
@@ -162,7 +162,21 @@ def generate():
                         final_sect_pr = child
                         break
 
-                # Append all body elements from rendered template into final_doc before sectPr
+                # --- Hard page break paragraph ---
+                # Guarantees this practical always starts on a fresh page,
+                # no matter what the template's own sectPr says.
+                WORD_NS = 'http://schemas.openxmlformats.org/wordprocessingml/2006/main'
+                pb_para  = etree.Element(f'{{{WORD_NS}}}p')
+                pb_run   = etree.SubElement(pb_para, f'{{{WORD_NS}}}r')
+                pb_break = etree.SubElement(pb_run,  f'{{{WORD_NS}}}br')
+                pb_break.set(f'{{{WORD_NS}}}type', 'page')
+
+                if final_sect_pr is not None:
+                    final_sect_pr.addprevious(pb_para)
+                else:
+                    final_doc.element.body.append(pb_para)
+
+                # Append all body elements from rendered template
                 for element in page_tpl.element.body:
                     if element.tag.endswith('sectPr'):
                         continue
