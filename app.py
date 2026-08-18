@@ -33,12 +33,16 @@ def keep_alive():
 def get_template_path(branch, title_length):
     """
     Select the appropriate Word template based on branch and title length.
-    - title_length <= 43: short title (template1)
-    - 44 <= title_length <= 115: medium title (template)
-    - title_length > 115: long title (template2)
-    
-    Supports branch-specific naming patterns (e.g. tempitfor65wordtitle.docx, template_it.docx, template1_it.docx)
-    with fallback to default CSE templates (template1.docx, template.docx, template2.docx).
+
+    CSE title ranges:
+      - <= 43 chars        → template1.docx
+      - 44 – 115 chars     → template.docx
+      - > 115 chars        → template2.docx
+
+    IT title ranges:
+      - <= 43 chars        → tempitfor43wordtitle.docx
+      - 44 – 115 chars     → tempitfo44to115rwordtitle.docx
+      - 116 – 180 chars    → tempitfor115to180wordtitle.docx
     """
     branch_key = (branch or 'cse').strip().lower()
 
@@ -49,74 +53,31 @@ def get_template_path(branch, title_length):
     else:
         category = 'short'
 
-    it_candidates = {
-        'short': [
-            'template1_it.docx',
-            'it_template1.docx',
-            'tempitfor65wordtitle.docx',
-            'templates_docx/it/template1.docx',
-            'templates/it/template1.docx',
-            'template1.docx'
-        ],
-        'medium': [
-            'tempitfor65wordtitle.docx',
-            'template_it.docx',
-            'it_template.docx',
-            'templates_docx/it/template.docx',
-            'templates/it/template.docx',
-            'template.docx'
-        ],
-        'long': [
-            'template2_it.docx',
-            'it_template2.docx',
-            'tempitfor65wordtitle.docx',
-            'templates_docx/it/template2.docx',
-            'templates/it/template2.docx',
-            'template2.docx'
-        ]
+    # Direct file mapping — no fallback lists needed
+    templates = {
+        'cse': {
+            'short':  'template1.docx',
+            'medium': 'template.docx',
+            'long':   'template2.docx',
+        },
+        'it': {
+            'short':  'tempitfor43wordtitle.docx',
+            'medium': 'tempitfo44to115rwordtitle.docx',
+            'long':   'tempitfor115to180wordtitle.docx',
+        },
     }
 
-    general_candidates = {
-        'short': [
-            f'template1_{branch_key}.docx',
-            f'{branch_key}_template1.docx',
-            f'templates_docx/{branch_key}/template1.docx',
-            f'templates/{branch_key}/template1.docx',
-            'template1.docx'
-        ],
-        'medium': [
-            f'template_{branch_key}.docx',
-            f'{branch_key}_template.docx',
-            f'templates_docx/{branch_key}/template.docx',
-            f'templates/{branch_key}/template.docx',
-            'template.docx'
-        ],
-        'long': [
-            f'template2_{branch_key}.docx',
-            f'{branch_key}_template2.docx',
-            f'templates_docx/{branch_key}/template2.docx',
-            f'templates/{branch_key}/template2.docx',
-            'template2.docx'
-        ]
-    }
+    if branch_key not in templates:
+        raise ValueError(f"Unsupported branch '{branch}'. Only 'CSE' and 'IT' are supported.")
 
-    candidates = it_candidates[category] if branch_key == 'it' else general_candidates[category]
-    title_key = 'title' if category == 'short' else 'titleeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'
+    selected_path = templates[branch_key][category]
 
-    selected_path = None
-    for candidate in candidates:
-        if os.path.exists(candidate):
-            selected_path = candidate
-            break
+    if not os.path.exists(selected_path):
+        raise FileNotFoundError(
+            f"Template '{selected_path}' for branch '{branch}' ({category} title) not found."
+        )
 
-    if not selected_path:
-        default_file = 'template1.docx' if category == 'short' else ('template2.docx' if category == 'long' else 'template.docx')
-        if os.path.exists(default_file):
-            selected_path = default_file
-        else:
-            raise FileNotFoundError(f"Template for branch '{branch}' ({category} title) not found.")
-
-    return selected_path, title_key
+    return selected_path
 
 
 @app.route('/generate', methods=['POST'])
@@ -172,8 +133,9 @@ def generate():
             page_data['practical_no'] = practical_numbers[practical_idx]
             page_data['title'] = title
             page_data['titleeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'] = title
+            page_data['titleeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee'] = title
             
-            tpl_path, _ = get_template_path(branch, len(title))
+            tpl_path = get_template_path(branch, len(title))
                 
             if not os.path.exists(tpl_path):
                 raise FileNotFoundError(f"Template '{tpl_path}' is missing.")
