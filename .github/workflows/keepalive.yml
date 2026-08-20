@@ -1,0 +1,18 @@
+name: Keep Render Alive
+
+on:
+  schedule:
+    # Run every 10 minutes (UTC) to prevent Render's 15-minute idle sleep
+    - cron: '*/10 * * * *'
+  workflow_dispatch: # Allows manual trigger from GitHub Actions tab
+
+jobs:
+  keep-alive:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ping Keep-Alive Endpoint
+        run: |
+          URL="https://termwork-website.onrender.com/keep-alive"
+          echo "Pinging $URL..."
+          STATUS=$(curl -s -o /dev/null -w "%{http_code}" -m 30 "$URL" || echo "000")
+          echo "HTTP Status: $STATUS"

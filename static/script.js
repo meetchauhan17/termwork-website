@@ -384,5 +384,18 @@ document.addEventListener('DOMContentLoaded', () => {
     // Instead, we expose launchConfetti globally for the submit handler to call.
     window.launchConfetti = launchConfetti;
 
+    // === Client-Side Keep-Alive Heartbeat ===
+    // Pings /keep-alive every 5 minutes so Render never sleeps while the user has the page open
+    function sendHeartbeat() {
+        fetch('/keep-alive')
+            .then(res => res.json())
+            .catch(() => {
+                // Silent failover
+            });
+    }
+    // Ping every 5 minutes (300,000 ms)
+    setInterval(sendHeartbeat, 5 * 60 * 1000);
+
 });
+
 

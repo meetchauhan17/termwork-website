@@ -186,9 +186,21 @@ The app looks for `template.docx`, `template1.docx`, and `template2.docx` in the
 </details>
 
 <details>
-<summary><strong>📌 App sleeping on Render (free tier)</strong></summary>
+<summary><strong>📌 App sleeping after 15 minutes on Render (Free Tier)</strong></summary>
 
-Use [UptimeRobot](https://uptimerobot.com) to ping `/keep-alive` every 5 minutes. The endpoint returns `200 OK` to keep the server active.
+Render's free tier automatically suspends web services after **15 minutes of inactivity**, leading to a 50+ second cold start delay or request timeouts.
+
+This project includes **multiple built-in mechanisms** to keep your app alive:
+
+1. **Auto Self-Pinger (Built-in)**: `app.py` runs a background worker daemon that automatically detects `RENDER_EXTERNAL_URL` and sends a keep-alive request every 10 minutes.
+2. **Client-side Heartbeat (Built-in)**: As long as any student has the webpage open, the browser automatically sends a `/keep-alive` ping every 5 minutes.
+3. **GitHub Actions Workflow (Included)**: `.github/workflows/keepalive.yml` is configured to ping your app every 10 minutes automatically via GitHub Actions cron.
+4. **External Pinger (Recommended for 100% 24/7 Uptime)**:
+   - Go to [UptimeRobot](https://uptimerobot.com) or [Cron-Job.org](https://cron-job.org).
+   - Create a free HTTP monitor pointing to: `https://your-app-name.onrender.com/keep-alive`
+   - Set the interval to **5 or 10 minutes**.
+
+> 💡 *Note: Render's free tier provides 750 free instance hours per month, which is enough to run 1 web service 24/7 without exceeding limits (31 days × 24 hrs = 744 hrs).*
 </details>
 
 ---

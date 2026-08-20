@@ -2,6 +2,9 @@ import os
 import re
 import copy
 import sys
+import time
+import threading
+import urllib.request
 import subprocess
 from flask import Flask, render_template, request, send_file, jsonify
 from docxtpl import DocxTemplate
@@ -19,6 +22,59 @@ os.makedirs('temp', exist_ok=True)
 os.makedirs('outputs', exist_ok=True)
 
 
+def cleanup_old_files():
+    """Removes output and temp files older than 1 hour to keep storage clean."""
+    now = time.time()
+    for folder in ['temp', 'outputs']:
+        if os.path.exists(folder):
+            for filename in os.listdir(folder):
+                filepath = os.path.join(folder, filename)
+                try:
+                    # Remove files older than 3600 seconds (1 hour)
+                    if os.path.isfile(filepath) and os.stat(filepath).st_mtime < now - 3600:
+                        os.remove(filepath)
+                except Exception:
+                    pass
+
+
+def start_self_ping_worker():
+    """
+    Background worker that pings the Render external URL every 10 minutes
+    to keep the free-tier service awake and prevent it from going to sleep.
+    """
+    def ping_loop():
+        # Wait 30 seconds after server startup before first ping
+        time.sleep(30)
+        while True:
+            # Render automatically injects RENDER_EXTERNAL_URL (e.g. https://termwork-website.onrender.com)
+            app_url = os.environ.get('RENDER_EXTERNAL_URL') or os.environ.get('APP_URL')
+            if not app_url and os.environ.get('RENDER_EXTERNAL_HOSTNAME'):
+                app_url = f"https://{os.environ.get('RENDER_EXTERNAL_HOSTNAME')}"
+
+            if app_url:
+                target_url = f"{app_url.rstrip('/')}/keep-alive"
+                try:
+                    req = urllib.request.Request(
+                        target_url,
+                        headers={'User-Agent': 'Render-Self-Ping/1.0'}
+                    )
+                    with urllib.request.urlopen(req, timeout=20) as response:
+                        if response.status == 200:
+                            print(f"[Keep-Alive] Pinged {target_url} successfully (Status: 200).")
+                except Exception as err:
+                    print(f"[Keep-Alive] Self-ping to {target_url} failed: {err}")
+
+            # Sleep 10 minutes (600 seconds) - well below Render's 15-minute inactivity timeout
+            time.sleep(600)
+
+    thread = threading.Thread(target=ping_loop, daemon=True)
+    thread.start()
+
+
+# Start background keep-alive ping loop on app launch
+start_self_ping_worker()
+
+
 @app.route('/')
 def home():
     return render_template('index.html')
@@ -26,8 +82,9 @@ def home():
 
 @app.route('/keep-alive')
 def keep_alive():
-    """Lightweight endpoint for UptimeRobot to ping and prevent Render from sleeping."""
-    return "I am awake!", 200
+    """Lightweight endpoint for pingers & browser heartbeat to prevent Render from sleeping."""
+    return jsonify({"status": "active", "message": "I am awake!"}), 200
+
 
 
 
@@ -222,11 +279,23 @@ def generate():
             convert(output_docx, output_pdf)
         else:
             # For Linux / Docker execution (using LibreOffice)
-            subprocess.run(['libreoffice', '--headless', '--convert-to', 'pdf', output_docx, '--outdir', 'outputs'])
+            # Use isolated UserInstallation directory to prevent LibreOffice locks/crashes
+            profile_dir = f"/tmp/libreoffice_profile_{os.getpid()}"
+            subprocess.run([
+                'libreoffice',
+                f'-env:UserInstallation=file://{profile_dir}',
+                '--headless',
+                '--convert-to', 'pdf',
+                output_docx,
+                '--outdir', 'outputs'
+            ], timeout=60)
 
-        # Clean up temp files
+        # Clean up first page temp file
         if os.path.exists(temp_first):
             os.remove(temp_first)
+
+        # Clean up stale files older than 1 hour asynchronously / safely
+        cleanup_old_files()
 
         return jsonify({
             'success': True,
